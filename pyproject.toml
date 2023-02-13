@@ -1,0 +1,6 @@
+[tool.pytask.ini_options]
+paths = "src/jse_replication"
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"

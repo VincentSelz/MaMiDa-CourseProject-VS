@@ -1,0 +1,39 @@
+name: data_manager
+channels:
+  - pytask
+  - conda-forge
+
+dependencies:
+  - conda-build
+  - ipykernel
+
+  - jupyterlab
+  - jupyter_contrib_nbextensions
+  - linearmodels
+  - matplotlib
+  - numpy
+  - pandas
+  - openpyxl
+  - plotly-orca
+  - pip
+  - pytask>=0.0.11
+  - pytask-r
+  - pytask-latex>=0.0.10
+  - pytest
+  - pytest-cov
+  - python
+  - python-graphviz
+  - scipy
+  - spyder
+  - statsmodels
+
+
+
+  - pip:
+
+    - rpy2
+    - pre-commit
+    - plotly
+    - stargazer
+
+prefix: /Users/vincentselz/opt/anaconda3/envs/data_manager

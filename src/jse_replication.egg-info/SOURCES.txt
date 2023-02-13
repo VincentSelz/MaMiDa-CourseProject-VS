@@ -1,0 +1,6 @@
+pyproject.toml
+setup.cfg
+src/jse_replication.egg-info/PKG-INFO
+src/jse_replication.egg-info/SOURCES.txt
+src/jse_replication.egg-info/dependency_links.txt
+src/jse_replication.egg-info/top_level.txt
