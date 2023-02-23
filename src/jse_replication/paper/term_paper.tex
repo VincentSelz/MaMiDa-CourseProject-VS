@@ -1,0 +1,129 @@
+% !TeX document-id = {2870843d-1baa-4f6a-bd0a-a5c796104a32}
+% !BIB TS-program = biber
+% !TeX encoding = UTF-8
+
+\documentclass[11pt,a4paper,leqno]{article}
+
+\usepackage{a4wide}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{float, afterpage, rotating, graphicx}
+\usepackage{epstopdf}
+\usepackage{longtable, booktabs, tabularx}
+\usepackage{fancyvrb, moreverb, relsize}
+\usepackage{eurosym, calc}
+% \usepackage{chngcntr}
+\usepackage{amsmath, amssymb, amsfonts, amsthm, bm}
+\usepackage{caption}
+\usepackage{mdwlist}
+\usepackage{xfrac}
+\usepackage{setspace}
+\usepackage{xcolor}
+\usepackage{subcaption}
+\usepackage{minibox}
+% \usepackage{pdf14} %Enable for Manuscriptcentral
+% \usepackage{endfloat} %Enable to move tables / figures to the end. Useful for some submissions.
+
+% BIB SETTINGS
+\usepackage[
+backend=biber,
+giveninits=true,
+maxnames=30,
+maxcitenames=20,
+uniquename=init,
+url=false,
+style=authoryear,
+]{biblatex}
+\addbibresource{refs.bib}
+\setlength\bibitemsep{0.3cm} % space between entries in the reference list
+
+
+\widowpenalty=10000
+\clubpenalty=10000
+
+\setlength{\parskip}{1ex}
+\setlength{\parindent}{0ex}
+\setstretch{1.5}
+
+\title{Towards a replication of MST \\ Using the Survey of Consumer Expectations\thanks{Vincent Selz, Goethe University. Email: \texttt{vincent[dot]selz[at]stud[dot]uni-frankfurt[dot]de}. } }
+
+\author{Vincent Selz}
+
+\date{
+	{\bf Preliminary \-\- please do not quote}
+	\\[1ex]
+	\today
+}
+
+\begin{document}
+
+\maketitle
+
+
+\clearpage
+\section{Introduction}
+
+\textcite{Zimbo} wallah
+
+The purpose of this project is to predict basketball games. Naturally, this practice is intriguing to use for organized betting, yet this project primarily comes about because it neccesitates the command of several different skills, I wanted to enhance. Bunker \& Thabtah (2017) provide a comprehensive survey of machine learning applications in sports. My project is close to Moorthy et al. (2013), who test algorithms on college basketball games. For the setup of this project the template by Gaudecker (2019) is used and all the programming tasks are processed with Python. This project scrapes data for about 12,000 NBA games from basketball\-reference.com and uses those to train machine learning techniques to predict match outcomes. For the analysis several different datasets and algorithms are compared regarding their performances. Then, the best algorithms (with the best performing) dataset is tested on unseen data.
+
+
+\section{Factors}
+
+
+Other than European football, the North American sports are trenched in statistics. The Moneyball era in baseball infected the other major league sports and lead to a quest for the best advanced statistics to measure player impact, efficiency etc. This leads to an environment where statistics are embraced. I refrain from using, these advanced statistics for the following reasons:
+
+First, there is beauty in simplicity. I only need the score between the two teams to construct my whole analysis. It uses minimal data and, so, does not possibly  incorporate bias into the factors.
+Other than Moorthy et al. (2013)\footnote{For the first games of the season, they use the seasonal averages of the prior year.},  I only use historic season of the same season for the analysis. Due to Free Agency and the Draft the spillover from season-to-season is not as high that I felt comfortable using the season averages from the year before. Subsequently, the first games of each season, where no data was yet to be accumulated, were dropped from the analysis. This leaves us with 11,887 observations for which we have the variables  Points Per Game, Points Per Game of the Opponent, Point Differential, Wins, Losses, Win Percentage and Days Off for both teams. Clearly, using all these regressors together would lead to collinearity since, for example the Point Differential is the difference between Points Per Game, Points Per Game of the Opponent. Hence, I am using five different datasets for the initial predictions. To the best of my knowledge this is the first study that uses Days Off as a factor in predicting basketball games. Given that NBA games often are played on following days, it seems natural that fatigue plays a role in determining the outcome.
+
+The data management may look obtuse at times. Yet, for my study I determined it is best to work on the team level and, then, incorporate it into one file. This also has the benefit that, if necessary, this datatrove can be used to do statistical analysis on team level data. It also can be repurposed to perform databank duties.
+
+Another reason for not conducting the analysis with advanced method is the time constraint that did not make it possible for me to get richer data. Standard procedure would have me normalize the points per game by the pace of the game. As well as using true field goal percentage (adjusts for the three ball and free throws), Assists Rates etc. to make my predictions. A comparison between my approach and the incorporation of  advanced statistics can be found in the Discussion.
+
+\section{Methods}
+
+For the analysis, I am testing seven algorithms against each other: \\
+\begin{itemize}
+\setlength\itemsep{0.1em}
+\item Logistic Regression (LR)
+\item Linear Discriminant Analysis (LDA)
+\item Quadratic Discriminant Analysis (QDA)
+\item K-Nearest Neighbors (KNN)
+\item Regression Tree Classifier (DTC)
+\item Naive Bayesian (NB)
+\item Multi\-Level Perceptron (MLP)
+\end{itemize}
+
+Most of these are standard bearers to predict binary outcomes. Yet, I also include non-parametric methods such as the KNN (that is set with k=9) and more exotic ones such as the Multi-Level Perceptron. This artificial neural network is used because the study of Moorthy et al. (2013) suggested that the neural network is the best performing predictor for their dataset of collegiate basketball games. This gives me a broad portoflio of different techniques with various degrees of sophistication and approaches. All of these classifiers are used on five datasets. Herefore, the dataset is first split into two - singling out a test set. 10-fold stratified cross-validation is used on the training set to determine which dataset and which algorithm performs best.
+
+\section{Results}
+
+\input{../../../bld/tables/tab1_summary_statistics_sce.tex}
+
+
+\input{../../../bld/tables/tab3_bootstrap_lower_bound_variance.tex}
+In table 1, one can see how the algorithms stack up against each other. The best performing dataset is a combination of the Win Percentages and Points Per Game with Days Off. However, the increase in accuracy compared to Win Percentage and Point Differential is negligble. This is somewhat surprising since, Point Per Game is richer and can potentially explain how high-scoring teams fare against good defensive teams etc. The Days Off are also in this dataset but it seems, if at all, they only have a slight impact on the predictions. What sticks out is that the two worst performing algorithms are KNN and the Regression Tree. All other predictors are moving around roughly the same accuracy scores. Surprisingly, the more sophisticated algorithms cannot outshine the simpler one for this matter. The logistic regression has an accuracy of 66.58\% for the dataset with Win Percentages and Points Per Game (and Days Off). Of course, this potentially can change when they are treated with more complex regressors.
+
+In general compared to a coin flip, the accuracy scores do not seem high. Especially when always predicting a home win gives us a 58\% chance of being right. Moorthy et al.(2013) find that there appears to be a glass ceiling for sports predictions at around 75\%. Their analysis using advanced statistics climbs up into the lower 70\%s.
+
+
+For the prediction on the withheld set, we want to use the best algorithm and dataset. As can be seen in the overview, the Naive Bayesian on the set with Win Percentages and Points Per Game (without Days Off) performs best. However, it does not perform as well on other datasets and has a higher variance.\footnote{Unfortunately, I have no table at hand but this can be easily verified within the analysis.} This is why the logistic regression with dataset including Win Percentages + PPG and Days Off is used. It appears that the the logisitc regression is more stable and, hence, possibly performs better on unseen data.  As shown on the classification report card, the logistic regression predicts the right outcome for 65\% of the games. The precision conditioned on a given outcomes gives us an idea where the general accuracy score comes from. Whereas when the home team lost, this outcome was predicted 61\% of the time. On the other hand when the home team won, the accuracy was at 67\%. This pattern can be seen in the recall scores that give us the fraction of positive cases that were correctly identified. The recall score when the the home team won is 80\%, whereas it is below 50\%, at 44\%, for the case that the home team lost.
+
+\section{Discussion}
+
+As mentioned above Moorthy et al.(2013) outperform my analysis. Using the same methods as they do, I cannot replicate their success.  Hence, I come to the conclusion that it is in the attributes not in the models. Similar to Moorthy et al.(2013) the simpler algorithms in my project perform remarkably well when compared to their sophisticated counterparts. This also suggests that sophisticated methods cannot play out their advantages when working with \textit{simple} data. Using advanced statistics should help push my accuracy up over 70\% but to significantly improve from there, it appears one has to construct new attributes who \textit{grasp} the game at a higher level.
+
+One approach can be to weight the observations. For instance, the last five games of a team (and the statistics of these games) are weighted more heavily than older games. Moreover, NBA teams do not play against each team the same number of times. Hence, their schedules are different which leads to difference in how strong the opponents are that the teams have to face. A metric for this can be constructed that weights the teams statistics given how strong/weak their previous opponents are.
+
+The machine learning techniques are trained on the last ten years. Naturally, one could increase the range here to have a bigger sample. However, basketball has changed tremendously in the last decades. When Larry Bird infamously won the Three\-Point Shootout 1988 with his warm-up jacket on, he attempted 3.1 three-pointers per game. In contrast, last year James Harden hoisted up 13.2 three-point shots. This league-wide increase of three-point-attempts leads to more variance and, simply, a different game. Thus, using older data can potentially decrease the accuracy for predicting future outcomes. This is the reason only ten years of data are used.
+
+Another path for this project can be to have a look at data on individual player level. Naturally, this adds plenty dimensions but maybe yields interesting results. Momentarily, nothing can account for a case where the best teams loses their best players to injury before a game and, subsequently, loses the game against an inferior opponent. This is data that is available before a game and, hence, should be incorporated. Note that the data management is a magnitude more difficult. The analysis could look as follows: Every game has 48 minutes and five players play for each team. So, each team can distribute 240 minutes between their available players. Who plays how much can be approximated with historical data (minutes per game) but when one player is suddenly is unavailable, it is unclear who would fill these minutes. If this can be efficiently done and every player has a weight, a player value so to speak, this could lead to better predictions.
+
+Collecting historic betting lines for all games and see what happend when one puts skin in the game would be another possible addition to this project. Since, the purpose of this project is to predict future games this is the next natural step. Using the betting lines then gives the opportunity to construct a program that systematically bets on games. This can range from simple programs that would just put money on the predicted outcomes to sophisticated ones that can evaluate where they are able to outperform the sports bets the most. It also is interesting how, well these constructed algorithms can predict betting lines to get an idea how close to the professionally used algorithms one is.
+
+\section{References}
+
+\printbibliography
+
+
+\end{document}
