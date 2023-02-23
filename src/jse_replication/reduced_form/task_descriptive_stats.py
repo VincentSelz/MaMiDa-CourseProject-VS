@@ -11,9 +11,7 @@ from scipy import stats
 
 from jse_replication.config import BLD,SRC
 
-@pytask.mark.depends_on(
-    BLD / "author_data" / "sce_datafile.dta",
-    )
+@pytask.mark.depends_on(BLD / "author_data" / "sce_datafile.dta")
 @pytask.mark.produces(BLD / "tables" / "tab1_summary_statistics_sce.tex")
 def task_make_tab1(depends_on,produces):
     df = prep_data(depends_on)
