@@ -15,6 +15,7 @@ from jse_replication.config import BLD,SRC
 @pytask.mark.produces(BLD / "tables" / "tab1_summary_statistics_sce.tex")
 def task_make_tab1(depends_on,produces):
     df = prep_data(depends_on)
+    df['edu_cat'] = df['edu_cat'].replace(['Some college, including associates degree'], 'Some college')
     rslt = _combine_summary_stats(df)
     rslt.to_latex(produces)
 
