@@ -38,8 +38,7 @@ def _make_latex_table_from_scratch(lb_z1,lb_z12,cov_z_pred1, cov_z_pred2,se_s,pr
     cov_z_pred2_se = se_s.loc['cov_z_pred2']
     
     text_file = open(produces, "w")
-    table = f""""
-    \begin{{tabular}}{{lcc}}
+    table = rf"""\begin{{tabular}}{{lcc}}
     \toprule 
     Lower bound based on: &  Value &   SE \\
     \midrule
