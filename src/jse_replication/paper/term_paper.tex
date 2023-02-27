@@ -1,3 +1,4 @@
+% !TeX spellcheck = en_US
 % !TeX document-id = {2870843d-1baa-4f6a-bd0a-a5c796104a32}
 % !BIB TS-program = biber
 % !TeX encoding = UTF-8
@@ -13,6 +14,7 @@
 \usepackage{fancyvrb, moreverb, relsize}
 \usepackage{eurosym, calc}
 % \usepackage{chngcntr}
+\usepackage[flushleft]{threeparttable}
 \usepackage{amsmath, amssymb, amsfonts, amsthm, bm}
 \usepackage{caption}
 \usepackage{mdwlist}
@@ -21,6 +23,7 @@
 \usepackage{xcolor}
 \usepackage{subcaption}
 \usepackage{minibox}
+\usepackage{hyperref}
 % \usepackage{pdf14} %Enable for Manuscriptcentral
 % \usepackage{endfloat} %Enable to move tables / figures to the end. Useful for some submissions.
 
@@ -45,13 +48,11 @@ style=authoryear,
 \setlength{\parindent}{0ex}
 \setstretch{1.5}
 
-\title{Towards a replication of MST \\ Using the Survey of Consumer Expectations\thanks{Vincent Selz, Goethe University. Email: \texttt{vincent[dot]selz[at]stud[dot]uni-frankfurt[dot]de}. } }
+\title{Towards a replication of \textcite{MST2021}:  \\ Using the Survey of Consumer Expectations\thanks{Vincent Selz, Goethe University. Email: \texttt{vincent[dot]selz[at]stud[dot]uni-frankfurt[dot]de}. } }
 
 \author{Vincent Selz}
 
 \date{
-	{\bf Preliminary \-\- please do not quote}
-	\\[1ex]
 	\today
 }
 
@@ -63,63 +64,102 @@ style=authoryear,
 \clearpage
 \section{Introduction}
 
-\textcite{Zimbo} wallah
-
-The purpose of this project is to predict basketball games. Naturally, this practice is intriguing to use for organized betting, yet this project primarily comes about because it neccesitates the command of several different skills, I wanted to enhance. Bunker \& Thabtah (2017) provide a comprehensive survey of machine learning applications in sports. My project is close to Moorthy et al. (2013), who test algorithms on college basketball games. For the setup of this project the template by Gaudecker (2019) is used and all the programming tasks are processed with Python. This project scrapes data for about 12,000 NBA games from basketball\-reference.com and uses those to train machine learning techniques to predict match outcomes. For the analysis several different datasets and algorithms are compared regarding their performances. Then, the best algorithms (with the best performing) dataset is tested on unseen data.
-
-
-\section{Factors}
-
-
-Other than European football, the North American sports are trenched in statistics. The Moneyball era in baseball infected the other major league sports and lead to a quest for the best advanced statistics to measure player impact, efficiency etc. This leads to an environment where statistics are embraced. I refrain from using, these advanced statistics for the following reasons:
-
-First, there is beauty in simplicity. I only need the score between the two teams to construct my whole analysis. It uses minimal data and, so, does not possibly  incorporate bias into the factors.
-Other than Moorthy et al. (2013)\footnote{For the first games of the season, they use the seasonal averages of the prior year.},  I only use historic season of the same season for the analysis. Due to Free Agency and the Draft the spillover from season-to-season is not as high that I felt comfortable using the season averages from the year before. Subsequently, the first games of each season, where no data was yet to be accumulated, were dropped from the analysis. This leaves us with 11,887 observations for which we have the variables  Points Per Game, Points Per Game of the Opponent, Point Differential, Wins, Losses, Win Percentage and Days Off for both teams. Clearly, using all these regressors together would lead to collinearity since, for example the Point Differential is the difference between Points Per Game, Points Per Game of the Opponent. Hence, I am using five different datasets for the initial predictions. To the best of my knowledge this is the first study that uses Days Off as a factor in predicting basketball games. Given that NBA games often are played on following days, it seems natural that fatigue plays a role in determining the outcome.
-
-The data management may look obtuse at times. Yet, for my study I determined it is best to work on the team level and, then, incorporate it into one file. This also has the benefit that, if necessary, this datatrove can be used to do statistical analysis on team level data. It also can be repurposed to perform databank duties.
-
-Another reason for not conducting the analysis with advanced method is the time constraint that did not make it possible for me to get richer data. Standard procedure would have me normalize the points per game by the pace of the game. As well as using true field goal percentage (adjusts for the three ball and free throws), Assists Rates etc. to make my predictions. A comparison between my approach and the incorporation of  advanced statistics can be found in the Discussion.
-
-\section{Methods}
-
-For the analysis, I am testing seven algorithms against each other: \\
-\begin{itemize}
-\setlength\itemsep{0.1em}
-\item Logistic Regression (LR)
-\item Linear Discriminant Analysis (LDA)
-\item Quadratic Discriminant Analysis (QDA)
-\item K-Nearest Neighbors (KNN)
-\item Regression Tree Classifier (DTC)
-\item Naive Bayesian (NB)
-\item Multi\-Level Perceptron (MLP)
-\end{itemize}
-
-Most of these are standard bearers to predict binary outcomes. Yet, I also include non-parametric methods such as the KNN (that is set with k=9) and more exotic ones such as the Multi-Level Perceptron. This artificial neural network is used because the study of Moorthy et al. (2013) suggested that the neural network is the best performing predictor for their dataset of collegiate basketball games. This gives me a broad portoflio of different techniques with various degrees of sophistication and approaches. All of these classifiers are used on five datasets. Herefore, the dataset is first split into two - singling out a test set. 10-fold stratified cross-validation is used on the training set to determine which dataset and which algorithm performs best.
-
-\section{Results}
-
-\input{../../../bld/tables/tab1_summary_statistics_sce.tex}
+% Introduction 
+% Data
+% Data: Repository + Pytask
+% Paper/Replication
+% Contribution (Kommentar mit den Imputed vs. Standard)
 
 
-\input{../../../bld/tables/tab3_bootstrap_lower_bound_variance.tex}
-In table 1, one can see how the algorithms stack up against each other. The best performing dataset is a combination of the Win Percentages and Points Per Game with Days Off. However, the increase in accuracy compared to Win Percentage and Point Differential is negligble. This is somewhat surprising since, Point Per Game is richer and can potentially explain how high-scoring teams fare against good defensive teams etc. The Days Off are also in this dataset but it seems, if at all, they only have a slight impact on the predictions. What sticks out is that the two worst performing algorithms are KNN and the Regression Tree. All other predictors are moving around roughly the same accuracy scores. Surprisingly, the more sophisticated algorithms cannot outshine the simpler one for this matter. The logistic regression has an accuracy of 66.58\% for the dataset with Win Percentages and Points Per Game (and Days Off). Of course, this potentially can change when they are treated with more complex regressors.
 
-In general compared to a coin flip, the accuracy scores do not seem high. Especially when always predicting a home win gives us a 58\% chance of being right. Moorthy et al.(2013) find that there appears to be a glass ceiling for sports predictions at around 75\%. Their analysis using advanced statistics climbs up into the lower 70\%s.
+\begin{center}
+	\tiny
+\input{../../../bld/tables/tab_1_transition_rate_percep.tex}
+\textit{Notes:} All regression use survey weights. The even columns are using the authors data and the uneven columns the own data. $^{{***}}$,$^{{**}}$,$^{{*}}$ denote significance on the, 10, 5, 1 percent level. Standard Errors are clustered at the individual level.
+\end{center}
 
 
-For the prediction on the withheld set, we want to use the best algorithm and dataset. As can be seen in the overview, the Naive Bayesian on the set with Win Percentages and Points Per Game (without Days Off) performs best. However, it does not perform as well on other datasets and has a higher variance.\footnote{Unfortunately, I have no table at hand but this can be easily verified within the analysis.} This is why the logistic regression with dataset including Win Percentages + PPG and Days Off is used. It appears that the the logisitc regression is more stable and, hence, possibly performs better on unseen data.  As shown on the classification report card, the logistic regression predicts the right outcome for 65\% of the games. The precision conditioned on a given outcomes gives us an idea where the general accuracy score comes from. Whereas when the home team lost, this outcome was predicted 61\% of the time. On the other hand when the home team won, the accuracy was at 67\%. This pattern can be seen in the recall scores that give us the fraction of positive cases that were correctly identified. The recall score when the the home team won is 80\%, whereas it is below 50\%, at 44\%, for the case that the home team lost.
+\begin{center}
+	\tiny
+	\input{../../../bld/tables/tab_4_percep_udur.tex}
+	\textit{Notes:} All regression use survey weights. The first two columns use only the first elicitation for each individual. The even columns are using the authors data and the uneven columns the own data. $^{{***}}$,$^{{**}}$,$^{{*}}$ denote significance on the, 10, 5, 1 percent level. Standard Errors are clustered at the individual level.
+\end{center}
 
-\section{Discussion}
+\begin{center}
+	\input{../../../bld/tables/tab3_bootstrap_lower_bound_variance.tex}
+\end{center}
 
-As mentioned above Moorthy et al.(2013) outperform my analysis. Using the same methods as they do, I cannot replicate their success.  Hence, I come to the conclusion that it is in the attributes not in the models. Similar to Moorthy et al.(2013) the simpler algorithms in my project perform remarkably well when compared to their sophisticated counterparts. This also suggests that sophisticated methods cannot play out their advantages when working with \textit{simple} data. Using advanced statistics should help push my accuracy up over 70\% but to significantly improve from there, it appears one has to construct new attributes who \textit{grasp} the game at a higher level.
 
-One approach can be to weight the observations. For instance, the last five games of a team (and the statistics of these games) are weighted more heavily than older games. Moreover, NBA teams do not play against each team the same number of times. Hence, their schedules are different which leads to difference in how strong the opponents are that the teams have to face. A metric for this can be constructed that weights the teams statistics given how strong/weak their previous opponents are.
+In this term paper, I will replicate elements of \textcite{MST2021}. They leverage the Survey of Consumer's Expectation (henceforth SCE) to investigate job seekers perception of their employment prospects. In particular, they are interested in disentangling true duration dependence (Ljungbist, Sargent) from a selection effect where the observed negative duration dependence . They find that ... 
 
-The machine learning techniques are trained on the last ten years. Naturally, one could increase the range here to have a bigger sample. However, basketball has changed tremendously in the last decades. When Larry Bird infamously won the Three\-Point Shootout 1988 with his warm-up jacket on, he attempted 3.1 three-pointers per game. In contrast, last year James Harden hoisted up 13.2 three-point shots. This league-wide increase of three-point-attempts leads to more variance and, simply, a different game. Thus, using older data can potentially decrease the accuracy for predicting future outcomes. This is the reason only ten years of data are used.
+In this term paper, I will first introduce the SCE. For this purpose, I will roughly follow the outline given to us for the presentations. Next, I will discuss my contribution regarding the replication. In addition to that, I will present my work ???. 
 
-Another path for this project can be to have a look at data on individual player level. Naturally, this adds plenty dimensions but maybe yields interesting results. Momentarily, nothing can account for a case where the best teams loses their best players to injury before a game and, subsequently, loses the game against an inferior opponent. This is data that is available before a game and, hence, should be incorporated. Note that the data management is a magnitude more difficult. The analysis could look as follows: Every game has 48 minutes and five players play for each team. So, each team can distribute 240 minutes between their available players. Who plays how much can be approximated with historical data (minutes per game) but when one player is suddenly is unavailable, it is unclear who would fill these minutes. If this can be efficiently done and every player has a weight, a player value so to speak, this could lead to better predictions.
+% Data Strategy
+In order to promote transparency and replicability, the entire project has been stored on Github, which utilizes the workflow management system, \textit{pytask}, developed by \textcite{Raabe2020}.  Following the instructions provided on Github, it should be possible for anyone  to replicate the results. The replication process focuses on reproducing the reduced form results using the original data, and then comparing them to the outcomes obtained by using the SCE data downloaded from the Federal Reserve Bank of New York's website.
 
-Collecting historic betting lines for all games and see what happend when one puts skin in the game would be another possible addition to this project. Since, the purpose of this project is to predict future games this is the next natural step. Using the betting lines then gives the opportunity to construct a program that systematically bets on games. This can range from simple programs that would just put money on the predicted outcomes to sophisticated ones that can evaluate where they are able to outperform the sports bets the most. It also is interesting how, well these constructed algorithms can predict betting lines to get an idea how close to the professionally used algorithms one is.
+\section{Data} % Should be 2/3 pages and can be concluded with Table 1 from MST
+% Quick Overview
+The SCE is a monthly survey conducted by the Federal Reserve Bank of New York conducted since 2013 that aims to gather information on consumer expectations. \textcite{SCEOverview} provide a comprehensive overview over the SCE. The survey is based on a rotating panel of about 1,300 households, and respondents are asked a range of questions about their expectations for aggregate and individual economic conditions. The data collected from the survey is used to help inform monetary policy decisions and to better understand consumer behavior and economic trends.
+
+% Details on the sample
+The sample of the SCE is based on the Consumer Confidence Survey (CCS) which is a mail survey which selects a new random sample each month on the basis of the universe of U.S. Postal Service addresses and targets the household heads. The SCE consists of the subset of CCS respondents who indicated a willingness to participate in the SCE. One condition, however, is the availability of Internet and an email address. From the CCS respondents who signaled a willingness to participate, the sample is drawn via a stratified random sampling approach. This stratified approach spans the following dimensions: income, gender, race/ethnicity and Census Division.   Due to the internet based approach, people under the age of 30 are over sampled \parencite{SCEOverview}. Weights are provided to make the sample representative for the population of U.S. household heads. They are based on region, age, education and income and are targeting the Census population estimates from the American Community Survey. 
+
+% SCE and MSC
+The Survey of Consumer Expectations (SCE) and the Michigan Survey of Consumers both aim to collect data on consumer expectations, but the SCE focuses on gathering rich, high-frequency data. Compared to the Michigan Survey, the SCE has several advantages. Firstly, it covers a broader range of topics and gathers detailed information on areas such as expectations for income growth and home prices. Secondly, the SCE asks questions related to the probability of future events and can also measure uncertainty around the expectation. The broader range of topics covered and detailed information gathered by the SCE make it a more comprehensive tool for analyzing consumer expectations and their potential impact on the economy.
+
+%  How to get the data % Data qualities/ Pecularities
+The Federal Reserve Bank of New York's website publishes the results of the SCE on a monthly basis, which are available to the public without requiring a subscription.  All datasets, along with the survey questionnaire, are readily provided. The data is supplied in several excel-files which is convenient but has the disadvantage of consuming comparatively a lot of storage. The variable names are consistent across waves and available in a panel format. The data coding follows the specifications provided in the questionnaire and is easy to comprehend. In addition to the core module, the SCE offers several supplements such as the SCE Credit Access Survey, SCE Public Policy Survey and SCE Household Spending Survey. They are fielded quarterly as a rotating module of the SCE. 
+
+% Density forecasts
+Extending the methodology proposed by \textcite{Manski}, the SCE uses three types of questions to elicit probabilistic expectations. The first type of question asks about binary outcomes, such as whether the personal income will increase over the next twelve months. The second type of question asks for point estimates of continuous outcomes, such as the percentage increase or decrease in earnings over the next twelve months. The third type of question asks respondents to give density forecasts, where they have to assign percentage points over a range of bins for the continuous outcomes. Density forecasts provide information beyond just the first moments of the distribution, allowing for the measurement of uncertainty about economic conditions at the individual level. Leveraging this information can provide a new way to test macroeconomic models using micro data and to understand the impact of uncertainty on economic decisions. 
+% Enrich the example a little bit more
+For instance, in models where certainty equivalence is absent, decisions made today are influenced not only by the expectation of the future wage but also the uncertainty associated with it. Utilizing the subjective density forecasts instead of the rational expectation can yield a more detailed picture of economic decision-making. This can have implications for differential policies aimed at improving welfare. 
+% Check das nochmal anständig und schreib es nochmal anständig.
+Along a similar route, \textcite{Baleer2021} use the SCE to obtain measures of labor risk for different demographic groups. They find substantial optimistic bias which are heterogeneous throughout different groups. Based on this, they show that differences in biases can help understand savings behavior across individuals which is a quantitatively important channel in wealth inequality. 
+
+% More  questions this has been applied to 
+
+% Probably easiest to stick quite close to what they are saying about their strategy
+\textcite{MST2021} use job seeker's elicited beliefs to investigate the negative duration dependence of unemployment. They use the following two questions administered to job seekers in the SCE:
+\begin{center}
+	\textit{What do you think is the percent chance that within the coming 12 months, you will find a job that you will accept, considering the pay and type of work?}
+\end{center}
+and
+\begin{center}
+	\textit{And looking at the more immediate future, what do you think is the percent chance that within the coming 3 months, you will find a job that you will accept, considering the pay and type of work?}
+\end{center}
+
+In addition to that the respondents are asked to self-report their unemployment duration. However, during unemployment spells, the self-reports seems to be somewhat contradicting. 
+% Attrittion
+ One advantage of the SCE is that it experiences low attrition. 58\% of all respondents complete all 12 monthly interviews \parencite{SCEOverview}. This allows the authors to self-construct the unemployment durations and circumvent contradictory self-reports. Moreover, the SCE allows us to track the individual over one year and, hence, we can infer the realized transition rates from unemployment into employment. 
+ 
+ %Summary statistics
+ \autoref{tab:summary_stats)} compares the summary statistics of the authors data to the data from the website. The sample is restricted to unemployed people aged between 20 and 65 who have answered the belief questions. Additionally, it appears that in their calculations a minor error slipped in. When calculating the weighted proportions of the groups, they calculate it on the (id-date)-unit and not on the individual level. 
+ 
+    \begin{table}[!htbp] 
+    \centering 
+	\caption{Summary Statistics}
+	\label{tab:summary_stats} 
+ 	\input{../../../bld/tables/tab1_summary_statistics_sce.tex}
+ 	\tiny
+ 	\textit{Notes:} Survey weights are used for all calculations. (3) replicates the paper exactly whereas (1) and (2) correct the error.
+	\end{table}
+ % Data differences
+ From the number of observations, it can be inferred that we do not succeed in obtaining the same exact dataset, the authors have.  In fact, \autoref{fig:comp_over_time} displays the number of respondents in each wave which have atleast one unemployment period. It shows that the authors have access to earlier data which is, as far as I know, not publicly available. After these initial discrepancies, the number of responses are quite similar. Unfortunately, it was not possible to match the respondents with the id since the author's dataset uses a different id structure which cannot be directly linked to the data which is available on the website.   
+
+\begin{figure}[!htbp]
+	\includegraphics{../../../bld/figures/data_comparison_over_time.png}
+  \caption{Data Comparison Over Time}
+\label{fig:comp_over_time}
+\end{figure}
+
+\section{Paper}
+
+% Summarize the paper (keep it to around 1/2 pages)
+
+% Plug in my reduced form evidence findings (either based on their data or ideally on my own data)
+
+\section{Contribution}
 
 \section{References}
 
