@@ -71,33 +71,16 @@ style=authoryear,
 % Contribution (Kommentar mit den Imputed vs. Standard)
 
 
-
-\begin{center}
-	\tiny
-\input{../../../bld/tables/tab_1_transition_rate_percep.tex}
-\textit{Notes:} All regression use survey weights. The even columns are using the authors data and the uneven columns the own data. $^{{***}}$,$^{{**}}$,$^{{*}}$ denote significance on the, 10, 5, 1 percent level. Standard Errors are clustered at the individual level.
-\end{center}
-
-
-\begin{center}
-	\tiny
-	\input{../../../bld/tables/tab_4_percep_udur.tex}
-	\textit{Notes:} All regression use survey weights. The first two columns use only the first elicitation for each individual. The even columns are using the authors data and the uneven columns the own data. $^{{***}}$,$^{{**}}$,$^{{*}}$ denote significance on the, 10, 5, 1 percent level. Standard Errors are clustered at the individual level.
-\end{center}
-
-\begin{center}
-	\input{../../../bld/tables/tab3_bootstrap_lower_bound_variance.tex}
-\end{center}
-
-
-In this term paper, I will replicate elements of \textcite{MST2021}. They leverage the Survey of Consumer's Expectation (henceforth SCE) to investigate job seekers perception of their employment prospects. In particular, they are interested in disentangling true duration dependence (Ljungbist, Sargent) from a selection effect where the observed negative duration dependence . They find that ... 
-
-In this term paper, I will first introduce the SCE. For this purpose, I will roughly follow the outline given to us for the presentations. Next, I will discuss my contribution regarding the replication. In addition to that, I will present my work ???. 
+In this term paper, I will replicate elements of \textcite{MST2021}. They leverage the Survey of Consumer's Expectation (henceforth SCE) to investigate job seekers perception of their employment prospects. In particular, they are interested in disentangling true duration dependence (Ljungbist, Sargent) from a selection effect where the observed negative duration dependence is driven by a selection effect. 
 
 % Data Strategy
 In order to promote transparency and replicability, the entire project has been stored on Github, which utilizes the workflow management system, \textit{pytask}, developed by \textcite{Raabe2020}.  Following the instructions provided on Github, it should be possible for anyone  to replicate the results. The replication process focuses on reproducing the reduced form results using the original data, and then comparing them to the outcomes obtained by using the SCE data downloaded from the Federal Reserve Bank of New York's website.
 
-\section{Data} % Should be 2/3 pages and can be concluded with Table 1 from MST
+\autoref{sec:data} will introduce the SCE and will  follow the outline given to us for the presentations. 
+\autoref{sec:paper}l will present my work regarding the replication of the reduced form results of the paper. 
+
+\section{Data} \label{sec:data}
+% Should be 2/3 pages and can be concluded with Table 1 from MST
 % Quick Overview
 The SCE is a monthly survey conducted by the Federal Reserve Bank of New York conducted since 2013 that aims to gather information on consumer expectations. \textcite{SCEOverview} provide a comprehensive overview over the SCE. The survey is based on a rotating panel of about 1,300 households, and respondents are asked a range of questions about their expectations for aggregate and individual economic conditions. The data collected from the survey is used to help inform monetary policy decisions and to better understand consumer behavior and economic trends.
 
@@ -105,7 +88,7 @@ The SCE is a monthly survey conducted by the Federal Reserve Bank of New York co
 The sample of the SCE is based on the Consumer Confidence Survey (CCS) which is a mail survey which selects a new random sample each month on the basis of the universe of U.S. Postal Service addresses and targets the household heads. The SCE consists of the subset of CCS respondents who indicated a willingness to participate in the SCE. One condition, however, is the availability of Internet and an email address. From the CCS respondents who signaled a willingness to participate, the sample is drawn via a stratified random sampling approach. This stratified approach spans the following dimensions: income, gender, race/ethnicity and Census Division.   Due to the internet based approach, people under the age of 30 are over sampled \parencite{SCEOverview}. Weights are provided to make the sample representative for the population of U.S. household heads. They are based on region, age, education and income and are targeting the Census population estimates from the American Community Survey. 
 
 % SCE and MSC
-The Survey of Consumer Expectations (SCE) and the Michigan Survey of Consumers both aim to collect data on consumer expectations, but the SCE focuses on gathering rich, high-frequency data. Compared to the Michigan Survey, the SCE has several advantages. Firstly, it covers a broader range of topics and gathers detailed information on areas such as expectations for income growth and home prices. Secondly, the SCE asks questions related to the probability of future events and can also measure uncertainty around the expectation. The broader range of topics covered and detailed information gathered by the SCE make it a more comprehensive tool for analyzing consumer expectations and their potential impact on the economy.
+The SCE and the Michigan Survey of Consumers both aim to collect data on consumer expectations, but the SCE focuses on gathering rich, high-frequency data. Compared to the Michigan Survey, the SCE has several advantages. Firstly, it covers a broader range of topics and gathers detailed information on areas such as expectations for income growth and home prices. Secondly, the SCE asks questions related to the probability of future events and can also measure uncertainty around the expectation. The broader range of topics covered and detailed information gathered by the SCE make it a more comprehensive tool for analyzing consumer expectations and their potential impact on the economy.
 
 %  How to get the data % Data qualities/ Pecularities
 The Federal Reserve Bank of New York's website publishes the results of the SCE on a monthly basis, which are available to the public without requiring a subscription.  All datasets, along with the survey questionnaire, are readily provided. The data is supplied in several excel-files which is convenient but has the disadvantage of consuming comparatively a lot of storage. The variable names are consistent across waves and available in a panel format. The data coding follows the specifications provided in the questionnaire and is easy to comprehend. In addition to the core module, the SCE offers several supplements such as the SCE Credit Access Survey, SCE Public Policy Survey and SCE Household Spending Survey. They are fielded quarterly as a rotating module of the SCE. 
@@ -115,12 +98,13 @@ Extending the methodology proposed by \textcite{Manski}, the SCE uses three type
 % Enrich the example a little bit more
 For instance, in models where certainty equivalence is absent, decisions made today are influenced not only by the expectation of the future wage but also the uncertainty associated with it. Utilizing the subjective density forecasts instead of the rational expectation can yield a more detailed picture of economic decision-making. This can have implications for differential policies aimed at improving welfare. 
 % Check das nochmal anständig und schreib es nochmal anständig.
-Along a similar route, \textcite{Baleer2021} use the SCE to obtain measures of labor risk for different demographic groups. They find substantial optimistic bias which are heterogeneous throughout different groups. Based on this, they show that differences in biases can help understand savings behavior across individuals which is a quantitatively important channel in wealth inequality. 
+In a similar vein, \textcite{Baleer2021} use the SCE to measure labor risk for various demographic groups. They find substantial optimistic bias which are heterogeneous throughout different groups. Based on this, they show that differences in biases can help understand savings behavior across individuals which is a quantitatively important channel in wealth inequality. 
 
 % More  questions this has been applied to 
+%
 
 % Probably easiest to stick quite close to what they are saying about their strategy
-\textcite{MST2021} use job seeker's elicited beliefs to investigate the negative duration dependence of unemployment. They use the following two questions administered to job seekers in the SCE:
+\textcite{MST2021} use the elicited beliefs of job seeker's to investigate the negative duration dependence of unemployment. They use the following two questions administered to job seekers in the SCE:
 \begin{center}
 	\textit{What do you think is the percent chance that within the coming 12 months, you will find a job that you will accept, considering the pay and type of work?}
 \end{center}
@@ -129,33 +113,86 @@ and
 	\textit{And looking at the more immediate future, what do you think is the percent chance that within the coming 3 months, you will find a job that you will accept, considering the pay and type of work?}
 \end{center}
 
-In addition to that the respondents are asked to self-report their unemployment duration. However, during unemployment spells, the self-reports seems to be somewhat contradicting. 
+Along with other information, respondents in the study were asked to report their duration of unemployment. However, self-reports during unemployment spells can be inconsistent.
 % Attrittion
- One advantage of the SCE is that it experiences low attrition. 58\% of all respondents complete all 12 monthly interviews \parencite{SCEOverview}. This allows the authors to self-construct the unemployment durations and circumvent contradictory self-reports. Moreover, the SCE allows us to track the individual over one year and, hence, we can infer the realized transition rates from unemployment into employment. 
+ One advantage of the SCE is that it experiences low attrition. 58\% of all respondents complete all 12 monthly interviews \parencite{SCEOverview}. This allows the authors to construct unemployment durations themselves and thus avoid relying solely on possibly inconsistent self-reports.  Moreover, by tracking individuals over the course of a year, the SCE allows the authors to infer the realized exit rates from unemployment. 
  
  %Summary statistics
- \autoref{tab:summary_stats)} compares the summary statistics of the authors data to the data from the website. The sample is restricted to unemployed people aged between 20 and 65 who have answered the belief questions. Additionally, it appears that in their calculations a minor error slipped in. When calculating the weighted proportions of the groups, they calculate it on the (id-date)-unit and not on the individual level. 
+ \autoref{tab:summary_stats)} compares the summary statistics of the authors data to the data from the website. The sample used in the comparison is restricted to unemployed people aged between 20 and 65 who have answered the belief questions. However, it should be mentioned that there appears to be a minor error in their calculations. Specifically, when calculating the weighted proportions of the groups, they used the (id-date)-unit instead of the individual level. Hence, they count each individual as many time as the individual participated in the survey. Upon closer examination, it appears that the sample in the paper is younger and less educated than originally reported, with an even larger share of females. To investigate the extent of the differences between the data used by the authors and the data available on the SCE website, we compare (1) and (2). While the sample used by the authors is larger, the aggregate differences seem to be minor. In fact, the difference between the job finding rate for long-term unemployed and short-term unemployed seems to be even more pronounced in the data from the SCE website.  
  
     \begin{table}[!htbp] 
     \centering 
-	\caption{Summary Statistics}
-	\label{tab:summary_stats} 
+	\caption{Summary Statistics} \label{tab:summary_stats} 
  	\input{../../../bld/tables/tab1_summary_statistics_sce.tex}
- 	\tiny
- 	\textit{Notes:} Survey weights are used for all calculations. (3) replicates the paper exactly whereas (1) and (2) correct the error.
+ 	\begin{minipage}[center]{0.7\textwidth}
+ 	\caption*{\footnotesize \textbf{Notes:} Survey weights are used for all calculations. (3) replicates the reported statistics from the paper exactly. (2) corrects for the error reported above and (1) is displaying the summary statistics for the SCE sample.}
+ 	\end{minipage}
 	\end{table}
- % Data differences
- From the number of observations, it can be inferred that we do not succeed in obtaining the same exact dataset, the authors have.  In fact, \autoref{fig:comp_over_time} displays the number of respondents in each wave which have atleast one unemployment period. It shows that the authors have access to earlier data which is, as far as I know, not publicly available. After these initial discrepancies, the number of responses are quite similar. Unfortunately, it was not possible to match the respondents with the id since the author's dataset uses a different id structure which cannot be directly linked to the data which is available on the website.   
 
-\begin{figure}[!htbp]
-	\includegraphics{../../../bld/figures/data_comparison_over_time.png}
+ % Data differences
+Based on the number of observations presented in \autoref{tab:summary_stats}, it seems that I was not able to obtain the exact same dataset as the authors. As shown in \autoref{fig:comp_over_time}, the authors had access to earlier data that is, as far as I know, not publicly available. This explains the discrepancies observed initially, although the number of responses in subsequent waves is quite similar. Unfortunately, we were unable to match respondents based on their IDs since the author's dataset uses a different ID structure that cannot be directly linked to the data available on the website.
+
+\begin{figure}[!htbp] \centering
+	\includegraphics[width=0.75\textwidth]{../../../bld/figures/data_comparison_over_time.png}
+	\begin{minipage}[center]{0.75\textwidth}
+		\caption*{\footnotesize \textbf{Notes:} The figure displays the number of respondents in each month for the authors data and the data from the website.}
+	\end{minipage}
   \caption{Data Comparison Over Time}
 \label{fig:comp_over_time}
 \end{figure}
 
-\section{Paper}
+\section{Paper} \label{sec:paper}
 
-% Summarize the paper (keep it to around 1/2 pages)
+% Theoretical Underpoinning
+% Cite papers on both sides of the discussion 
+Understanding the determinants of negative duration dependence of unemployment on the job finding rate remains a topic of long-standing discussion within labor economics.  One approach explains the negative duration dependence by the deterioration of skills throughout the unemployment spell. It is also possible that employer's screen potential employees by duration. Within this approach, the job finding rate decreases over the unemployment spell on the individual level. Another approach views the duration dependence through the lense of a sorting mechanism where more employable people find jobs quicker, simply leaving the unemployment to select into long-term employment. However, the principal challenge to overcome is that the job finding rate is unobservable. In fact, we can only observe the binary outcome whether someone finds a job or not. 
+
+% Empirical Strategy
+The authors approach this literature from a new angle. They leverage the elicited beliefs of job seeker's and combined them with actual job finding to identify the true heterogeneity of job finding.
+ 
+
+% Finding 1 
+% Optimistic bias
+
+\begin{figure}[!htbp] \centering
+	\includegraphics[width=\textwidth]{../../../bld/figures/histogram_perceptions_figure_1.png}
+	\begin{minipage}[center]{\textwidth}
+		\caption*{\footnotesize \textbf{Notes:} The figure displays fraction of respondents within bins of 
+		10\% width}
+	\end{minipage}
+	\caption{Histogram Perceptions of Job Finding Rate}
+	\label{fig:percep_hist}
+\end{figure}
+
+% Finding 2
+% Perceptions have significant predictional value for actual job finding
+
+% Finding 3 
+% Identifying the heterogeneity in true job finding rate
+
+% FInding 4
+% Optimisitc bias increase over unemployment duration
+
+% Finding 5
+% Controlling for spell fixed effects,  it vanishes =>
+
+\begin{center}
+	\tiny
+	\input{../../../bld/tables/tab_1_transition_rate_percep.tex}
+	\textit{Notes:} All regression use survey weights. The even columns are using the authors data and the uneven columns the own data. $^{{***}}$,$^{{**}}$,$^{{*}}$ denote significance on the, 10, 5, 1 percent level. Standard Errors are clustered at the individual level.
+\end{center}
+
+
+
+\begin{center}
+	\input{../../../bld/tables/tab3_bootstrap_lower_bound_variance.tex}
+\end{center}
+
+\begin{center}
+	\tiny
+	\input{../../../bld/tables/tab_4_percep_udur.tex}
+	\textit{Notes:} All regression use survey weights. The first two columns use only the first elicitation for each individual. The even columns are using the authors data and the uneven columns the own data. $^{{***}}$,$^{{**}}$,$^{{*}}$ denote significance on the, 10, 5, 1 percent level. Standard Errors are clustered at the individual level.
+\end{center}
 
 % Plug in my reduced form evidence findings (either based on their data or ideally on my own data)
 
