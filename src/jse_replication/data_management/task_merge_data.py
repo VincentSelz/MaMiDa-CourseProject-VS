@@ -21,7 +21,8 @@ matplotlib.pyplot.title(r'ABC123 vs $\mathrm{ABC123}^{123}$')
     ])
 @pytask.mark.produces(BLD / "data" / "merged_SCE_data.csv")
 def task_merge_SCE_data(depends_on,produces):
-    """Read data, clean data adn export the data."""
+    """Reads and merges two Excel files, cleans and exports the data."""
+    # Read the two Excel files into separate dataframes
     df1 = pd.read_excel(depends_on[0],header=1)
     df2 = pd.read_excel(depends_on[1],header=1)
     for df in [df1,df2]:
@@ -109,8 +110,8 @@ def _visualize_data_discrepancies(real_count,auth_count,produces):
     fig, ax = plt.subplots()
     fig.supylabel('# of Respondents',fontsize = 11.0)
     fig.supxlabel('Date',fontsize = 11.0)
-    ax.plot(auth_count,label ='Authors Data')
-    ax.plot(real_count,label='Publicly Available Data')
+    ax.plot(auth_count,label ='Authors Data',color='#FF7F50')
+    ax.plot(real_count,label='Own Data',color='#800000')
     #ax.set_xticklabels([x.strftime('%Y-%m') for x in xticks])
     ax.set_xticklabels(new_dates)
     ax.legend()
@@ -151,6 +152,15 @@ def _read_data(depends_on):
     return df
 
 def _rename_variables(df):
+    """Renames variables in the given dataframe and remove unnecessary columns.
+
+    Args:
+        df (DataFrame): The input dataframe to rename variables in.
+
+    Returns:
+        DataFrame: The output dataframe with renamed variables.
+
+    """
     rename_dict = {
         'Q17new':'find_job_12mon',
         'Q18new': 'find_job_3mon',
@@ -187,6 +197,15 @@ def _rename_variables(df):
     return df
 
 def _read_aux_files(depends_on):
+    """Reads auxiliary data files into separate dataframes.
+
+   Args:
+       depends_on (list): A list of file paths of the auxiliary data files to read.
+
+   Returns:
+       tuple: A tuple of three dataframes.
+
+   """
     # BLS unemployment rate and job openings rate data (not seasonally adjusted, downloaded from BLS webpage)
     urjr = pd.read_stata(depends_on[1])
     # BLS state-level unemployment rate (not seasonally adjusted, downloaded from BLS webpage)
@@ -196,6 +215,18 @@ def _read_aux_files(depends_on):
     return urjr, stateur, rgdp
 
 def _merge_econ_data(df,urjr,stateur,rgdp):
+    """Merges economic data with a given dataframe.
+
+   Args:
+       df (pandas.DataFrame): The dataframe to merge with.
+       urjr (pandas.DataFrame): The dataframe containing BLS unemployment rate and job openings rate data.
+       stateur (pandas.DataFrame): The dataframe containing BLS state-level unemployment rate data.
+       rgdp (pandas.DataFrame): The dataframe containing real GDP growth rate and S&P500 index data.
+
+   Returns:
+       pandas.DataFrame: The merged dataframe.
+
+   """
     df = df.reset_index()
     for aux in [df,urjr,stateur,rgdp]:
         aux['date'] =  aux['date'].apply(lambda x: pd.to_datetime(str(x))).dt.strftime('%Y-%m')
@@ -206,15 +237,41 @@ def _merge_econ_data(df,urjr,stateur,rgdp):
     return df.set_index(['userid','date'])
 
 def _gen_lfs_data(df):
+    """Generates Labor Force Status (LFS) variable based on given columns of a dataframe.
+
+    Args:
+        df (pandas.DataFrame): The dataframe containing the columns necessary to generate the LFS variable.
+
+    Returns:
+        pandas.DataFrame: The updated dataframe with the new LFS variable.
+
+    """
     # generate LFS variable
     cond1 = df[['working_ft','working_pt','sick_leave','selfemployed']].any(axis='columns')
     cond2 = ((df["temp_laid_off"] == 1) | ((df["not_working_wouldlike"] == 1) & (df["looking_for_job"] == 1)) & ~cond1)
     cond3 = (~cond1 & ~cond2)
+    # LFS values
     values = [1, 2, 3]
+    # Create the new LFS variable using numpy's select() function and the defined conditions and values
     df["lfs"] = np.select([cond1,cond2,cond3], values)
     return df
 
 def _gen_spells(df):
+    """
+    Generates spell ID for non-employment spells in the input dataframe.
+
+    Parameters:
+    -----------
+    df : pandas.DataFrame
+        Input dataframe containing LFS status for each user at each time period.
+
+    Returns:
+    --------
+    pandas.DataFrame
+        Returns a new dataframe with the same columns as the input dataframe, as well as a new column called `spell_id` that
+        contains the spell ID for each non-employment spell for each user. The `spell_id` column is set to `pd.NA` for rows where the
+        LFS status is 1, indicating that there is no non-employment spell associated with that row.
+    """
     # generate spell id for nonemployment spells
     df= df.sort_index(level=["userid", "date"])
     change = ((df["lfs"].eq(2)) | (df["lfs"].eq(3))) & (df["lfs"].shift(1).eq(1))
@@ -224,6 +281,7 @@ def _gen_spells(df):
     return df
 
 def _clean_selfreported_unemployment(df):
+    """Topdcode self-reported unemployment duration."""
     df['udur_self'] = df['unemployment_duration']
     df.loc[df["udur_self"] <= -1, "udur_self"] = pd.NA
     df['udur_self_top'] = df['udur_self']
@@ -231,6 +289,27 @@ def _clean_selfreported_unemployment(df):
     return df
 
 def _gen_lfs_checks(df):
+    """
+    Generate variables to identify labor force status changes for each user in the input dataframe.
+
+    Args:
+    - df: pandas dataframe containing survey responses for multiple users
+
+    Returns:
+    - df: pandas dataframe with the following additional columns:
+        - 'olf': binary variable indicating if user is out of labor force in the current period
+        - 'total_olf': cumulative sum of 'olf' for each user
+        - 'emp': binary variable indicating if user is employed in the current period
+        - 'total_emp': cumulative sum of 'emp' for each user
+        - 'emp_so_far': cumulative sum of 'emp' up to the current period for each user
+        - 'lag_emp': binary variable indicating if user was employed in the previous period
+        - 'unemp': binary variable indicating if user is unemployed in the current period
+        - 'total_unemp': cumulative sum of 'unemp' for each user
+        - 'lag_unemp': binary variable indicating if user was unemployed in the previous period
+        - 'x': a counter variable
+        - 'obs': cumulative count of survey responses for each user
+        - 'spell_obs': cumulative count of survey responses within each spell (i.e. consecutive observations of the same LFS status)
+    """
     # sort by user ID and date of survey
     df = df.reset_index().sort_values(['userid', 'survey_date'])
 
@@ -258,6 +337,24 @@ def _gen_lfs_checks(df):
     return df
 
 def _fill_in_missing_self_reports(df):
+    """
+    Fills in missing values for self-reported duration data and computes the actual duration of employment spells.
+
+    Parameters:
+    -----------
+    df : pandas.DataFrame
+        The input dataframe containing columns representing relevant variables such as survey date, spell id, user id,
+        employment status, self-reported duration, etc.
+
+    Returns:
+    --------
+    df : pandas.DataFrame
+        The updated dataframe with additional columns for the day of survey, presence of self-reported data, cumulative
+        sum of non-missing self-reported values, duration between survey dates, actual duration of employment spells,
+        etc. The missing values for self-reported duration data are filled in based on certain conditions such as the
+        first date at which we observe it, the date at which a person is not missing the self-reported value, etc. The
+        negative values of actual duration are set to missing.
+    """
     df['day_of_surv'] = (pd.to_datetime(df['survey_date']) - pd.Timestamp('1960-01-01')).dt.days.astype(int)
 
     # find whether there is self-reported duration data for that spell
@@ -299,7 +396,6 @@ def _fill_in_missing_self_reports(df):
     mask = (df['emp_so_far']==0) & (df['nonmissdate']==df['day_of_surv'])
     df.loc[mask, 'udur'] = df['udur_self_top']
     # back-fill the duration if there is self-reported data but no observed employment spell before that date
-    # TODO: As of now this does not do anything
     df.loc[(df["ever_selfdata"] == 1) & (df["emp"] == 0) & (df["udur"].isna()), "udur"] = df['first_selfreport'] - ((df["nonmissdate"] - df["day_of_surv"]) / 30.3)
 
     # set negative values to missing
@@ -308,6 +404,7 @@ def _fill_in_missing_self_reports(df):
     return df
 
 def _gen_more_vars(df):
+    """Generate dummy variables such as for longterm unemployment and the interaction with job finding perceptions."""
     # Long term unemployment dummy
     values = [np.nan,1,0]
     df['longterm_unemployed'] = np.select([df['udur'].isna(),df['udur']>6,df['udur']<=6], values)
@@ -320,6 +417,24 @@ def _gen_more_vars(df):
     return df
 
 def _ue_transitions(df):
+    """
+    Calculates employment transitions from the given dataframe for both 1-month and 3-month horizons.
+    Adds two columns 'UE_trans_1mon' and 'UE_trans_3mon' to the dataframe indicating whether an individual 
+    transitions from unemployment to employment within the specified time horizon. 
+    
+    Args:
+        df (pandas.DataFrame): A pandas dataframe containing employment data. Must have the following columns:
+            - 'userid': unique identifier for each individual
+            - 'date': employment date in YYYY-MM-DD format
+            - 'lfs': labor force status code, 2 represents unemployed, 1 represents employed, and 3 represents inactive.
+    
+    Returns:
+        pandas.DataFrame: The original dataframe with two additional columns indicating employment transitions.
+            'UE_trans_1mon': Indicates whether the individual transitioned from unemployment to employment within 
+            the 1-month horizon.
+            'UE_trans_3mon': Indicates whether the individual transitioned from unemployment to employment within 
+            the 3-month horizon.
+    """
     df['datem'] = pd.to_datetime(df['date'])
     df['datem'] = df['datem'].dt.to_period('M')
 
@@ -339,6 +454,25 @@ def _ue_transitions(df):
     return df
 
 def _ue_3_mon_horizon(df):
+    """
+    Calculates a binary indicator variable "UE_trans_3mon" for each observation in the input DataFrame "df",
+    which indicates whether the individual experienced a transition from unemployment to employment within a
+    3-month horizon from the current observation.
+
+    Args:
+    - df (pandas.DataFrame): a DataFrame containing the input data, with the following columns:
+        - 'userid': unique identifier of the individual
+        - 'datem': month and year of the observation in YYYY-MM format
+        - 'lfs': labor force status, encoded as an integer:
+            - 1: employed
+            - 2: unemployed
+            - 3: not in labor force
+
+    Returns:
+    - pandas.DataFrame: the input DataFrame with an additional column 'UE_trans_3mon' that contains the binary
+    indicator variable for each observation, indicating whether the individual experienced a transition from
+    unemployment to employment within a 3-month horizon from the current observation.
+    """
     df.sort_values(by=['userid', 'datem'], inplace=True)
     unemp = [2,3]
     # Don't have a job but found one in the next period which is within 3 month
@@ -371,7 +505,7 @@ def _ue_3_mon_horizon(df):
     return df
 
 def _ue_3_mon_horizon_plus3(df):
-    # Indicator for 3-month job finding in 3 months from now (conditional on not being employed in 3 months from now)
+    """Indicator for 3-month job finding in 3 months from now (conditional on not being employed in 3 months from now."""
     df.sort_values(by=['userid', 'datem'], inplace=True)
     unemp = [2,3]
     group = df.groupby('userid')
@@ -404,6 +538,7 @@ def _ue_3_mon_horizon_plus3(df):
     return df
 
 def _job_find_3mon_plus(df):
+    """Shift the elicited belief back from the future."""
     df.sort_values(by=['userid', 'datem'], inplace=True)
     df['tplus1_percep_3mon'] = df.groupby('userid')['find_job_3mon'].shift(-1)
     df['tplus3_percep_3mon'] = df.groupby('userid')['find_job_3mon'].shift(-3)
@@ -413,6 +548,7 @@ def _job_find_3mon_plus(df):
 
 
 def _unemp_duration_dummies(df):
+    """Create dummies for unemployment duration up to one year."""
     bins = [0,1,2,3,4,5,6,7,8,9,10,11,12]
     labels = [0,1,2,3,4,5,6,7,8,9,10,11]
     df['nedur_1mo_'] = pd.cut(df['udur'],bins=bins,labels=labels)
@@ -437,7 +573,15 @@ def _observe_3survs_within_3(df):
     return df
 
 def _merge_demographics(df):
-    ## TODO: Merge them to every observation of the individual
+    """
+    Merge demographic information with the main dataset.
+
+    Args:
+        df (pd.DataFrame): A Pandas DataFrame containing the main dataset.
+
+    Returns:
+        pd.DataFrame: A Pandas DataFrame with demographic information merged with the main dataset.
+    """
     # Only go to the first observation
     df_first = df.sort_index(level=["userid", "date"]).groupby('userid').first()
     # Make categories then dummies
@@ -458,6 +602,7 @@ def _merge_demographics(df):
     return df
 
 def _sample_codes(df):
+    """Creates dummies for different sample restriction for use later."""
     df = _observe_3survs_within_3(df)
     # No clear violation and bothj elicitations exist
     condition1 = ((df['find_job_3mon']<=df['find_job_12mon'])&(df['find_job_3mon'].notna() | df['find_job_12mon'].notna()) & df['weight'].notna())
