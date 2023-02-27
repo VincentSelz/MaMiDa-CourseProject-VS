@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 
-def read_SCE(depends_on):
+def read_auth_data(depends_on):
     df = pd.read_stata(depends_on)
     df.set_index(['userid','date'],inplace=True)
     return df
@@ -15,7 +15,20 @@ def restrict_sample(df):
     df['x'] = 1
     return df
 
-def prep_data(depends_on):
-    df = read_SCE(depends_on)
+def prep_auth_data(depends_on):
+    df = read_auth_data(depends_on)
+    df = restrict_sample(df)
+    return df
+
+def read_SCE_data(depends_on):
+    df = pd.read_csv(depends_on)
+    df.set_index(['userid','date'],inplace=True)
+    return df
+
+def prep_SCE_data(depends_on):
+    df = read_SCE_data(depends_on)
+    # Have to be unemployed atleast once
+    df = df.loc[(df['total_unemp']>0)]
+    # Standard sample restrictions
     df = restrict_sample(df)
     return df
