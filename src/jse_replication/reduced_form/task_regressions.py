@@ -10,11 +10,6 @@ from linearmodels.panel import PanelOLS
 
 from jse_replication.config import BLD,SRC
 
-#deps = "../bld/author_data/sce_datafile.dta"
-
-#df = read_SCE(deps)
-#df = restrict_sample(df)
-
 @pytask.mark.depends_on(
     [BLD / "author_data" / "sce_datafile.dta",
      BLD / "data" / "new_sce_data.csv"])
@@ -29,7 +24,7 @@ def task_make_tab2(depends_on,produces):
     mod2, mod4, mod6, mod8 = _make_tab2_panel_b(auth_df)
     tab_b = _write_tab2_panel_b(mod1,mod2,mod3,mod4,mod5,mod6,mod7,mod8)
     tab = tab_a+tab_b
-    _export_tab(tab, produces)
+    export_tab(tab, produces)
     
 @pytask.mark.depends_on(
     [BLD / "author_data" / "sce_datafile.dta",
@@ -43,12 +38,7 @@ def task_make_tab4(depends_on,produces):
     mod1, mod3, mod5, mod7 = _tab4_regressions(df)
     mod2, mod4, mod6, mod8 = _tab4_regressions(auth_df)
     tab = _write_tab4(mod1,mod2,mod3,mod4,mod5,mod6,mod7,mod8)
-    _export_tab(tab, produces)
-    
-def _export_tab(tab,produces):
-    tex_file = open(produces, "w")
-    tex_file.write(tab)
-    tex_file.close()    
+    export_tab(tab, produces) 
     
 def _write_tab2_panel_a(mod1,mod2,mod3,mod4,mod5,mod6,mod7,mod8):
     #tex_file = open(produces, "w")

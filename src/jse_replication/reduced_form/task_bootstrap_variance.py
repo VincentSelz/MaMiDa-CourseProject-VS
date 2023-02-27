@@ -6,7 +6,6 @@ import statsmodels.formula.api as smf
 from jse_replication.reduced_form.weighted_moments import *
 from jse_replication.reduced_form.helper_functions import *
 
-#depends_on = "../bld/author_data/sce_datafile.dta"
 from jse_replication.config import BLD,SRC
 
 
@@ -73,6 +72,19 @@ def _make_latex_table_from_scratch(lb_z1,lb_z12,cov_z_pred1, cov_z_pred2,se_s,au
     text_file.close()
     
 def _bootstrap_variance(df,num_bootsim=2000,seed=345):
+    """
+   Calculates the bootstrap variance for a given DataFrame. 
+
+   Args:
+   - df (pandas.DataFrame): DataFrame containing the data to be analyzed. Must have a multi-level index with 
+     'userid' and 'spell_id' as the first two levels.
+   - num_bootsim (int): number of bootstrap samples to generate (default=2000)
+   - seed (int): random seed to use for the random number generator (default=345)
+
+   Returns:
+   - pandas.Series: standard deviation of the bootstrap results for the lower bound of z_1, lower bound of z_1 and z_2,
+     covariance of z_pred and z_1, and covariance of z_pred and z_2.
+   """
     np.random.seed(seed)
     users = df.index.get_level_values(0).unique()
     rslt = pd.DataFrame(columns=['lb_z1','lb_z12','cov_z_pred1','cov_z_pred2'])

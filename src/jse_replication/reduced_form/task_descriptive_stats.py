@@ -30,7 +30,7 @@ def task_make_tab1(depends_on,produces):
     
     tab = _write_tab1(real_rslt,pap_rslt,real_pap_rslt)
     
-    _export_tab(tab,produces)
+    export_tab(tab,produces)
     #rslt = _combine_summary_stats(auth_df,df)
     #rslt.to_latex(produces)
 
@@ -63,11 +63,6 @@ def _write_tab1(real_rslt,pap_rslt,real_pap_rslt):
     \end{{tabular}}
     """
     return tab
-
-def _export_tab(tab,produces):
-    tex_file = open(produces, "w")
-    tex_file.write(tab)
-    tex_file.close() 
 
 def _combine_summary_stats(auth_df,df):   
     # Calculation used in the paper
