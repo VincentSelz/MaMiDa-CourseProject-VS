@@ -10,45 +10,61 @@ from jse_replication.reduced_form.helper_functions import *
 from jse_replication.config import BLD,SRC
 
 
-@pytask.mark.depends_on(BLD / "author_data" / "sce_datafile.dta")
+@pytask.mark.depends_on(
+    [BLD / "author_data" / "sce_datafile.dta",
+     BLD / "data" / "new_sce_data.csv"])
 @pytask.mark.produces(BLD / "tables" / "tab3_bootstrap_lower_bound_variance.tex")
 def task_make_tab3(depends_on,produces):
-    
-    # Read in data and make it ready
-    df = read_SCE(depends_on)
-    df = restrict_sample(df)  
+    auth_df = prep_auth_data(depends_on[0])
+    df = prep_SCE_data(depends_on[1])
     df = df.loc[df['in_sample_2']== 1]  
+    auth_df = auth_df.loc[auth_df['in_sample_2']== 1]  
+    auth_df = _gen_columns(auth_df)
     df = _gen_columns(df)
     
     # Get the variance values
     lb_z1,lb_z12 = _lb_variance_base(df)
-    cov_z_pred1, cov_z_pred2 = _lb_variance_reg(df)
-    
+    cov_z_pred1, cov_z_pred2 = _lb_variance_reg(df)    
     # Bootstrap to obtain the standard errors
     se_s = _bootstrap_variance(df,num_bootsim=2000,seed=858)
     
-    # Make table
-    _make_latex_table_from_scratch(lb_z1,lb_z12,cov_z_pred1, cov_z_pred2,se_s,produces)
+    # Get the variance values
+    auth_lb_z1,auth_lb_z12 = _lb_variance_base(auth_df)
+    auth_cov_z_pred1, auth_cov_z_pred2 = _lb_variance_reg(auth_df)    
+    # Bootstrap to obtain the standard errors
+    auth_se_s = _bootstrap_variance(auth_df,num_bootsim=2000,seed=89)
     
-def _make_latex_table_from_scratch(lb_z1,lb_z12,cov_z_pred1, cov_z_pred2,se_s,produces):  
+    # Make table
+    _make_latex_table_from_scratch(lb_z1,lb_z12,cov_z_pred1, cov_z_pred2,se_s,auth_lb_z1,auth_lb_z12,auth_cov_z_pred1, auth_cov_z_pred2,auth_se_s,produces)
+    
+def _make_latex_table_from_scratch(lb_z1,lb_z12,cov_z_pred1, cov_z_pred2,se_s,auth_lb_z1,auth_lb_z12,auth_cov_z_pred1, auth_cov_z_pred2,auth_se_s,produces):  
     #open text file
     lb_z1_se = se_s.loc['lb_z1']
     lb_z12_se = se_s.loc['lb_z12']
     cov_z_pred1_se = se_s.loc['cov_z_pred1']
     cov_z_pred2_se = se_s.loc['cov_z_pred2']
+    auth_lb_z1_se = auth_se_s.loc['lb_z1']
+    auth_lb_z12_se = auth_se_s.loc['lb_z12']
+    auth_cov_z_pred1_se = auth_se_s.loc['cov_z_pred1']
+    auth_cov_z_pred2_se = auth_se_s.loc['cov_z_pred2']
     
     text_file = open(produces, "w")
-    table = rf"""\begin{{tabular}}{{lcc}}
-    \toprule 
-    Lower bound based on: &  Value &   SE \\
+    table = rf"""\begin{{table}}[!htbp] \centering 
+    \caption{{Lower Bound Variance}}
+    \label{{tab:lb_variance_table3}} 
+    \begin{{tabular}}{{lcccc}}
+    \toprule
+    & \multicolumn{{2}}{{c}}{{\textbf{{Own Data}}}} & \multicolumn{{2}}{{c}}{{\textbf{{Author Data}}}} \\
+    Lower bound based on: &  Value &   SE & Value & SE \\
     \midrule
-    ... 3-month elicitations only & {lb_z1:.3f} & {lb_z1_se:.3f} \\
-    ... 3- and 12-month elicitations & {lb_z12:.3f} & {lb_z12_se:.3f} \\
-    ... only control & {cov_z_pred1:.3f} & {cov_z_pred1_se:.3f} \\
-    ... controls and both elicitations & {cov_z_pred2:.3f} & {cov_z_pred2_se:.3f} \\
+    ... 3-month elicitations only & {lb_z1:.3f} & {lb_z1_se:.3f}  & {auth_lb_z1:.3f} & {auth_lb_z1_se:.3f}  \\
+    ... 3- and 12-month elicitations & {lb_z12:.3f} & {lb_z12_se:.3f}  &  {auth_lb_z12:.3f} & {auth_lb_z12_se:.3f}  \\
+    ... only control & {cov_z_pred1:.3f} & {cov_z_pred1_se:.3f}  & {auth_cov_z_pred1:.3f} &  {auth_cov_z_pred1_se:.3f}  \\
+    ... controls and both elicitations & {cov_z_pred2:.3f} & {cov_z_pred2_se:.3f}  & {auth_cov_z_pred2:.3f} & {auth_cov_z_pred2_se:.3f} \\
     \bottomrule
     \footnotesize{{\textit{{Notes:}} Standard errors are bootstrapped with 2,000 samples.}}
     \end{{tabular}}
+    \end{{table}}
     """
     #write string to file
     text_file.write(table)
@@ -112,7 +128,7 @@ def _lb_variance_reg(df):
     mod1 = smf.wls(dep_control,data=df1, weights=df1['weight']).fit(cov_type='cluster', cov_kwds={'groups': df1['userid']})
     df1['pred1'] = mod1.predict()
     cov_z_pred1 = w_cov(df1,'pred1','UE_trans_3mon')
-    df2 = df.loc[df['UE_trans_3mon'].notna() & df['find_job_12mon'].notna()]
+    df2 = df.loc[df['UE_trans_3mon'].notna() & df['find_job_12mon'].notna() & df['weight'].notna()]
     dep_job_control = 'UE_trans_3mon ~ '+' find_job_3mon + imputed_3mon +'+controls
     mod2 = smf.wls(dep_job_control,data=df2, weights=df2['weight']).fit(cov_type='cluster', cov_kwds={'groups': df2['userid']})
     df2['pred2'] = mod2.predict()
