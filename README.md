@@ -13,16 +13,15 @@ Then you have to move to the folder using the command line
 Next, you have to install and activate the conda environment. It creates a python environment with all required packages for the replication.
 
 ``
-conda env create -f environment.yml
-
-conda activate data_manager
+  conda env create -f environment.yml
+  conda activate data_manager
 ``
 
 Now, we have to invoke pytask by typing
 
 ``
-pip install -e .
-pytask
+  pip install -e .
+  pytask
 ``
 
 After this, the code should run between 5 and 10 minutes. The biggest contributors to the compile length are the large .xlsx files that
