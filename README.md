@@ -14,7 +14,10 @@ Next, you have to install and activate the conda environment. It creates a pytho
 
 ``
   conda env create -f environment.yml
+<<<<<<< HEAD
 
+=======
+>>>>>>> 18a121318cdcf7d222360a6fdea47b76e8d6bf04
   conda activate data_manager
 ``
 
@@ -22,7 +25,10 @@ Now, we have to invoke pytask by typing
 
 ``
   pip install -e .
+<<<<<<< HEAD
 
+=======
+>>>>>>> 18a121318cdcf7d222360a6fdea47b76e8d6bf04
   pytask
 ``
 
