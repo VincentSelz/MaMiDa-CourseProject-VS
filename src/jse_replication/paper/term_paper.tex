@@ -50,7 +50,7 @@ style=authoryear,
 
 \title{Towards a replication of \textcite{MST2021}:  \\ Using the Survey of Consumer Expectations\thanks{Vincent Selz, Goethe University. Email: \texttt{vincent[dot]selz[at]stud[dot]uni-frankfurt[dot]de}. } }
 
-\author{Vincent Selz}
+\author{Vincent Selz \\ 7707241}
 
 \date{
 	\today
@@ -76,8 +76,8 @@ In this term paper, I will replicate elements of \textcite{MST2021}. They levera
 % Data Strategy
 In order to promote transparency and replicability, the entire project has been stored on Github, which utilizes the workflow management system, \textit{pytask}, developed by \textcite{Raabe2020}.  Following the instructions provided on Github, it should be possible for anyone  to replicate the results. The replication process focuses on reproducing the reduced form results using the original data, and then comparing them to the outcomes obtained by using the SCE data downloaded from the Federal Reserve Bank of New York's website.
 
-\autoref{sec:data} will introduce the SCE and will  follow the outline given to us for the presentations. 
-\autoref{sec:paper}l will present my work regarding the replication of the reduced form results of the paper. 
+\autoref{sec:data} will introduce the SCE and will  follow the outline given to us for the presentations. Subsequently,
+\autoref{sec:paper} will present my work regarding the replication of the reduced form results of the paper and \autoref{sec:conclusion} gives an outlook to future avenues of research and concludes.
 
 \section{Data} \label{sec:data}
 % Should be 2/3 pages and can be concluded with Table 1 from MST
@@ -95,16 +95,17 @@ The Federal Reserve Bank of New York's website publishes the results of the SCE 
 
 % Density forecasts
 Extending the methodology proposed by \textcite{Manski}, the SCE uses three types of questions to elicit probabilistic expectations. The first type of question asks about binary outcomes, such as whether the personal income will increase over the next twelve months. The second type of question asks for point estimates of continuous outcomes, such as the percentage increase or decrease in earnings over the next twelve months. The third type of question asks respondents to give density forecasts, where they have to assign percentage points over a range of bins for the continuous outcomes. Density forecasts provide information beyond just the first moments of the distribution, allowing for the measurement of uncertainty about economic conditions at the individual level. Leveraging this information can provide a new way to test macroeconomic models using micro data and to understand the impact of uncertainty on economic decisions. 
-% Enrich the example a little bit more
-For instance, in models where certainty equivalence is absent, decisions made today are influenced not only by the expectation of the future wage but also the uncertainty associated with it. Utilizing the subjective density forecasts instead of the rational expectation can yield a more detailed picture of economic decision-making. This can have implications for differential policies aimed at improving welfare. 
+
+% This feels a little bit bumpy for now
+\textcite{BFKL2018} utilize the SCE to empirically investigate the effect of uncertainty on economic choices. First, they show that there is substantial heterogeneity across households regarding expectations. Second, they document that  uncertainty in expectation can predict choices. In particular, they find that more uncertain expectations lead to precautionary behavior. Because in models where certainty equivalence is absent, decisions made today are influenced not only by the expectation of the future wage but also the uncertainty associated with it. Utilizing the subjective density forecasts, in contrast to the rational expectation, can yield a more detailed picture of economic decision-making. This can have implications for differential policies aimed at improving welfare. 
+
 % Check das nochmal anständig und schreib es nochmal anständig.
 In a similar vein, \textcite{Baleer2021} use the SCE to measure labor risk for various demographic groups. They find substantial optimistic bias which are heterogeneous throughout different groups. Based on this, they show that differences in biases can help understand savings behavior across individuals which is a quantitatively important channel in wealth inequality. 
-
-% More  questions this has been applied to 
+% One more paper would be great
 %
 
 % Probably easiest to stick quite close to what they are saying about their strategy
-\textcite{MST2021} use the elicited beliefs of job seeker's to investigate the negative duration dependence of unemployment. They use the following two questions administered to job seekers in the SCE:
+\textcite{MST2021} use the elicited beliefs of job seeker's to investigate the negative duration dependence of unemployment. For this purpose, they use the following two questions administered to job seekers in the SCE:
 \begin{center}
 	\textit{What do you think is the percent chance that within the coming 12 months, you will find a job that you will accept, considering the pay and type of work?}
 \end{center}
@@ -117,18 +118,18 @@ Along with other information, respondents in the study were asked to report thei
 % Attrittion
  One advantage of the SCE is that it experiences low attrition. 58\% of all respondents complete all 12 monthly interviews \parencite{SCEOverview}. This allows the authors to construct unemployment durations themselves and thus avoid relying solely on possibly inconsistent self-reports.  Moreover, by tracking individuals over the course of a year, the SCE allows the authors to infer the realized exit rates from unemployment. 
  
- %Summary statistics
- \autoref{tab:summary_stats}compares the summary statistics of the authors data to the data from the website. The sample used in the comparison is restricted to unemployed people aged between 20 and 65 who have answered the belief questions. However, it should be mentioned that there appears to be a minor error in their calculations. Specifically, when calculating the weighted proportions of the groups, they used the (id-date)-unit instead of the individual level. Hence, they count each individual as many time as the individual participated in the survey. Upon closer examination, it appears that the sample in the paper is younger and less educated than originally reported, with an even larger share of females. To investigate the extent of the differences between the data used by the authors and the data available on the SCE website, we compare (1) and (2). While the sample used by the authors is larger, the aggregate differences seem to be minor. In fact, the difference between the job finding rate for long-term unemployed and short-term unemployed seems to be even more pronounced in the data from the SCE website.  
- 
-    \begin{table}[!htbp] 
-    \centering 
-	\caption{Summary Statistics} 
-	\label{tab:summary_stats} 
+     \begin{table}[!htbp] 
+ 	\centering 
+ 	\caption{Summary Statistics} 
+ 	\label{tab:summary_stats} 
  	\input{../../../bld/tables/tab1_summary_statistics_sce.tex}
  	\begin{minipage}[center]{0.7\textwidth}
- 	\caption*{\footnotesize \textbf{Notes:} Survey weights are used for all calculations. (3) replicates the reported statistics from the paper exactly. (2) corrects for the error reported above and (1) is displaying the summary statistics for the SCE sample.}
+ 		\caption*{\footnotesize \textbf{Notes:} Survey weights are used for all calculations. (3) replicates the reported statistics from the paper exactly. (2) corrects for the error reported above and (1) is displaying the summary statistics for the SCE sample.}
  	\end{minipage}
-	\end{table}
+ \end{table}
+ 
+ %Summary statistics
+ \autoref{tab:summary_stats}compares the summary statistics of the authors data to the data from the website. The sample used in the comparison is restricted to unemployed people aged between 20 and 65 who have answered the belief questions. However, it should be mentioned that there appears to be a minor error in their calculations. Specifically, when calculating the weighted proportions of the groups, they used the (id-date)-unit instead of the individual level. Hence, they count each individual as many time as the individual participated in the survey. Upon closer examination, it appears that the sample in the paper is younger and less educated than originally reported, with an even larger share of females. To investigate the extent of the differences between the data used by the authors and the data available on the SCE website, we compare (1) and (2). While the sample used by the authors is larger, the aggregate differences seem to be minor. In fact, the difference between the job finding rate for long-term unemployed and short-term unemployed seems to be even more pronounced in the data from the SCE website.  
 
  % Data differences
 Based on the number of observations presented in \autoref{tab:summary_stats}, it seems that I was not able to obtain the exact same dataset as the authors. As shown in \autoref{fig:comp_over_time}, the authors had access to earlier data that is, as far as I know, not publicly available. This explains the discrepancies observed initially, although the number of responses in subsequent waves is quite similar. Unfortunately, we were unable to match respondents based on their IDs since the author's dataset uses a different ID structure that cannot be directly linked to the data available on the website.
@@ -258,7 +259,7 @@ Based on the Cauchy-Schwarz inequality with biased beliefs, we can use the previ
 \end{minipage}
 \end{table}
 
-% Plug in my reduced form evidence findings (either based on their data or ideally on my own data)
+\section{Conclusion}\label{sec:conclusion}
 
 \section{References}
 
