@@ -7,35 +7,29 @@ This repository entails the code and term paper for the course "Macro with Micro
 Install the conda environment. The only requirement for this is to have a [Anaconda Distribution](https://www.anaconda.com/products/distribution) available.
 Then you have to move to the folder using the command line
 
-``cd your/folder/path
-``
+```
+$ cd your/folder/path
+```
 
 Next, you have to install and activate the conda environment. It creates a python environment with all required packages for the replication.
 
-``
-  conda env create -f environment.yml
-<<<<<<< HEAD
-
-=======
->>>>>>> 18a121318cdcf7d222360a6fdea47b76e8d6bf04
-  conda activate data_manager
-``
+```
+$  conda env create -f environment.yml
+$  conda activate data_manager
+```
 
 Now, we have to invoke pytask by typing
 
-``
-  pip install -e .
-<<<<<<< HEAD
+```
+$  pip install -e .
 
-=======
->>>>>>> 18a121318cdcf7d222360a6fdea47b76e8d6bf04
-  pytask
-``
+$  pytask
+```
 
-After this, the code should run between 5 and 10 minutes. The biggest contributors to the compile length are the large .xlsx files that
+After this, the code should run between about 10 minutes. The biggest contributors to the compile length are the large .xlsx files that
 have to be read in and the code to bootstrap the lower bound of the ex-ante variance in job finding probability.
 If all of this ran without error, you should see a **bld** folder containing all figures and tables produced.
-Additionally, pytask compiles the \latex file and produces the term paper.
+Additionally, pytask compiles the $\LatTeX$ file and produces the term paper.
 
 ## References
 --
