@@ -95,7 +95,6 @@ def _write_tab2_panel_b(mod1,mod2,mod3,mod4,mod5,mod6,mod7,mod8):
     return tab
 
 def _make_tab2_panel_a(df):
-    # TODO: Make it look nice
     df = df.loc[df['in_sample_2']== 1]
     df['userid'] = df.index.get_level_values(0)
     # Baseline
@@ -135,7 +134,6 @@ def make_tab3():
     """
 
 def _make_tab2_panel_b(df):
-    # TODO: Make it look nice
     df = df.loc[df['in_sample_2']== 1]
     df = df.loc[(df['tplus3_UE_trans_3mon'].notna()& df['tplus3_percep_3mon'].notna())]
     df['userid'] = df.index.get_level_values(0)
@@ -224,7 +222,7 @@ def _tab4_regressions(df):
     mod3.summary()
     df_new = df.set_index(['userid','spell_id'])
     form_spells = base_formula+' + TimeEffects +EntityEffects'
-    mod4 = PanelOLS.from_formula(form_spells, data=df_new,drop_absorbed=True, weights=df_new['weight']).fit(cov_type='clustered',cluster_time=True)
+    mod4 = PanelOLS.from_formula(form_spells, data=df_new,drop_absorbed=True, weights=df_new['weight']).fit(cov_type='clustered',cluster_entity=True)
     return mod1, mod2, mod3, mod4
     
 def _write_tab4(mod1,mod2,mod3,mod4,mod5,mod6,mod7,mod8):

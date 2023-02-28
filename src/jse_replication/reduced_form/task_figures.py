@@ -97,7 +97,7 @@ def _make_fig2(auth_df,df,produces):
     fig.supylabel('Realized 3-Month U-E transition rate',fontsize = 12.0)
     fig.supxlabel('Elicited Prob(Find Job in 3 Month)',fontsize = 12.0)
     # 45 degree line
-    ax.plot(np.arange(-0.1,1.1,0.1),np.arange(-0.1,1.1,0.1),color='grey',label='Rational Expectation')
+    ax.plot(np.arange(-0.1,1.1,0.01),np.arange(-0.1,1.1,0.01),color='grey',label='Rational Expectation')
     # Plot auth data
     ax.errorbar(w_mean2.index,w_mean2,yerr=(w_std2/np.sqrt(n2))*t_perc2,fmt='o',color='#FF7F50',capsize=4, label='Author Data')
     # Plot own data
