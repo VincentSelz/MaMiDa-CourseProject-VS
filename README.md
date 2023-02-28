@@ -33,6 +33,6 @@ Additionally, pytask compiles the latex file and produces the term paper.
 
 ## References
 
-- Raabe, T. (2021). *A python tool for managing scientic workflows*. [pytask](https://github.com/pytask-dev/pytask)
+- Raabe, T. (2020). *A python tool for managing scientic workflows*. [pytask](https://github.com/pytask-dev/pytask)
 - Mueller, A. I., Spinnewijn, J. and Topa, G. (2021). *Job Seekers' Perceptions and Employment Prospects: Heterogeneity, Duration Dependence, and Bias*.
 American Economic Review 111.1. p. 324-63.

@@ -31,7 +31,6 @@ dependencies:
 
   - pip:
 
-    - rpy2
     - pre-commit
     - plotly
     - stargazer
