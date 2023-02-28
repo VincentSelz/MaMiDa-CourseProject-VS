@@ -7,22 +7,23 @@ This repository entails the code and term paper for the course "Macro with Micro
 Install the conda environment. The only requirement for this is to have a [Anaconda Distribution](https://www.anaconda.com/products/distribution) available.
 Then you have to move to the folder using the command line
 
-``cd your/folder/path``
+``cd your/folder/path
+``
 
 Next, you have to install and activate the conda environment. It creates a python environment with all required packages for the replication.
 
-<code>
+``
 conda env create -f environment.yml
 
 conda activate data_manager
-</code>
+``
 
 Now, we have to invoke pytask by typing
 
-<code>
+``
 pip install -e .
 pytask
-</code>
+``
 
 After this, the code should run between 5 and 10 minutes. The biggest contributors to the compile length are the large .xlsx files that
 have to be read in and the code to bootstrap the lower bound of the ex-ante variance in job finding probability.
