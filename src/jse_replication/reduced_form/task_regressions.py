@@ -43,10 +43,6 @@ def task_make_tab4(depends_on,produces):
 def _write_tab2_panel_a(mod1,mod2,mod3,mod4,mod5,mod6,mod7,mod8):
     #tex_file = open(produces, "w")
     tab = rf"""
-    \begin{{table}}[!htbp] \centering 
-    \tiny
-    \caption{{Linear Regressions of Realized Job Finding Rates on Elicitations}}
-    \label{{tab:realized_perc_table2}} 
     \begin{{tabular}}{{lcccccccc}}
     \toprule
     \textbf{{Panel A.}} Dependent Variable: & & & & & & & & \\
@@ -87,7 +83,6 @@ def _write_tab2_panel_b(mod1,mod2,mod3,mod4,mod5,mod6,mod7,mod8):
     $R^{{2}}$    & {mod1.rsquared:.3f} & {mod2.rsquared:.3f} & {mod3.rsquared:.3f} & {mod4.rsquared:.3f} & {mod5.rsquared:.3f} & {mod6.rsquared:.3f} & {mod7.rsquared:.3f} & {mod8.rsquared:.3f} \\     
     \hline 
     \end{{tabular}}
-    \end{{table}}
     """
     notes = """
     \multicolumn{{9}}{{l}}{{\tablenotes \textit{{Notes:}} All regression use survey weights. The even columns are using the authors data and the uneven columns the own data. 
@@ -234,25 +229,29 @@ def _tab4_regressions(df):
     
 def _write_tab4(mod1,mod2,mod3,mod4,mod5,mod6,mod7,mod8):
     tab = rf"""
-    \begin{{table}}[!htbp] \centering 
-    \tiny
-    \caption{{Linear Regressions of Elicitations on Unemployment Duration}}
-    \label{{tab:realized_perc_table4}} 
-    \begin{{tabular}}{{lcccccccc}}
+    \begin{{tabular}}{{lcccc}}
     \toprule
-    Dependent Variable: & & & & & & & & \\
-    Elicited 3-Month Probability    & (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8)\\
+    Dependent Variable: & & & &  \\
+    Elicited 3-Month Probability    & (1) & (2) & (3) & (4) \\
     \midrule
-        Unemployment Duration,   & ${mod1.params.loc['udur']:.4f}^{{***}}$ & ${mod2.params.loc['udur']:.4f}^{{***}}$ & ${mod3.params.loc['udur']:.4f}^{{***}}$ & ${mod4.params.loc['udur']:.4f}^{{***}}$ &  ${mod5.params.loc['udur']:.4f}^{{***}}$& ${mod6.params.loc['udur']:.4f}^{{***}}$ & ${mod7.params.loc['udur']:.4f}$ & ${mod8.params.loc['udur']:.4f}$  \\
-    in Months                          & ({mod1.bse.loc['udur']:.4f}) & ({mod2.bse.loc['udur']:.4f}) & ({mod3.bse.loc['udur']:.4f}) & ({mod4.bse.loc['udur']:.4f}) & ({mod5.bse.loc['udur']:.4f}) & ({mod6.bse.loc['udur']:.4f}) & ({mod7.std_errors.loc['udur']:.4f}) & ({mod8.std_errors.loc['udur']:.4f}) \\
+        Unemployment Duration,   & ${mod1.params.loc['udur']:.4f}^{{***}}$ & ${mod2.params.loc['udur']:.4f}^{{***}}$ & ${mod3.params.loc['udur']:.4f}^{{***}}$ & ${mod4.params.loc['udur']:.4f}^{{***}}$ \\
+    in Months                          & ({mod1.bse.loc['udur']:.4f}) & ({mod2.bse.loc['udur']:.4f}) & ({mod3.bse.loc['udur']:.4f}) & ({mod4.bse.loc['udur']:.4f}) \\
     \midrule 
-    Demographic Controls & & &  &  & x & x &  &  \\
-    Spell Fixed Effects & & &  &  &  &  & x & x \\
-    Observations & {mod1.nobs:.0f} & {mod2.nobs:.0f} & {mod3.nobs:.0f} & {mod4.nobs:.0f} & {mod5.nobs:.0f} & {mod6.nobs:.0f} & {mod7.nobs:.0f} & {mod8.nobs:.0f} \\
-    $R^{{2}}$    & {mod1.rsquared:.3f} & {mod2.rsquared:.3f} & {mod3.rsquared:.3f} & {mod4.rsquared:.3f} & {mod5.rsquared:.3f} & {mod6.rsquared:.3f} & {mod7.rsquared:.3f} & {mod8.rsquared:.3f} \\     
+    Observations & {mod1.nobs:.0f} & {mod2.nobs:.0f} & {mod3.nobs:.0f} & {mod4.nobs:.0f}  \\
+    $R^{{2}}$    & {mod1.rsquared:.3f} & {mod2.rsquared:.3f} & {mod3.rsquared:.3f} & {mod4.rsquared:.3f}  \\     
     \hline
+    Dependent Variable:  & & & & \\
+    Elicited 3-Month Probability     & (5) & (6) & (7) & (8) \\
+    \midrule
+        Unemployment Duration,    &   ${mod5.params.loc['udur']:.4f}^{{***}}$& ${mod6.params.loc['udur']:.4f}^{{***}}$ & ${mod7.params.loc['udur']:.4f}$ & ${mod8.params.loc['udur']:.4f}$  \\
+    in Months                     & ({mod5.bse.loc['udur']:.4f}) & ({mod6.bse.loc['udur']:.4f}) & ({mod7.std_errors.loc['udur']:.4f}) & ({mod8.std_errors.loc['udur']:.4f}) \\
+    \midrule 
+    Demographic Controls   & x & x &  &  \\
+    Spell Fixed Effects   &  &  & x & x \\
+    Observations & {mod5.nobs:.0f} & {mod6.nobs:.0f} & {mod7.nobs:.0f} & {mod8.nobs:.0f} \\
+    $R^{{2}}$    & {mod5.rsquared:.3f} & {mod6.rsquared:.3f} & {mod7.rsquared:.3f} & {mod8.rsquared:.3f} \\
+    \bottomrule
     \end{{tabular}}
-    \end{{table}}
     """
     return tab
     

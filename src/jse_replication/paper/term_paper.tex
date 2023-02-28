@@ -118,11 +118,12 @@ Along with other information, respondents in the study were asked to report thei
  One advantage of the SCE is that it experiences low attrition. 58\% of all respondents complete all 12 monthly interviews \parencite{SCEOverview}. This allows the authors to construct unemployment durations themselves and thus avoid relying solely on possibly inconsistent self-reports.  Moreover, by tracking individuals over the course of a year, the SCE allows the authors to infer the realized exit rates from unemployment. 
  
  %Summary statistics
- \autoref{tab:summary_stats)} compares the summary statistics of the authors data to the data from the website. The sample used in the comparison is restricted to unemployed people aged between 20 and 65 who have answered the belief questions. However, it should be mentioned that there appears to be a minor error in their calculations. Specifically, when calculating the weighted proportions of the groups, they used the (id-date)-unit instead of the individual level. Hence, they count each individual as many time as the individual participated in the survey. Upon closer examination, it appears that the sample in the paper is younger and less educated than originally reported, with an even larger share of females. To investigate the extent of the differences between the data used by the authors and the data available on the SCE website, we compare (1) and (2). While the sample used by the authors is larger, the aggregate differences seem to be minor. In fact, the difference between the job finding rate for long-term unemployed and short-term unemployed seems to be even more pronounced in the data from the SCE website.  
+ \autoref{tab:summary_stats}compares the summary statistics of the authors data to the data from the website. The sample used in the comparison is restricted to unemployed people aged between 20 and 65 who have answered the belief questions. However, it should be mentioned that there appears to be a minor error in their calculations. Specifically, when calculating the weighted proportions of the groups, they used the (id-date)-unit instead of the individual level. Hence, they count each individual as many time as the individual participated in the survey. Upon closer examination, it appears that the sample in the paper is younger and less educated than originally reported, with an even larger share of females. To investigate the extent of the differences between the data used by the authors and the data available on the SCE website, we compare (1) and (2). While the sample used by the authors is larger, the aggregate differences seem to be minor. In fact, the difference between the job finding rate for long-term unemployed and short-term unemployed seems to be even more pronounced in the data from the SCE website.  
  
     \begin{table}[!htbp] 
     \centering 
-	\caption{Summary Statistics} \label{tab:summary_stats} 
+	\caption{Summary Statistics} 
+	\label{tab:summary_stats} 
  	\input{../../../bld/tables/tab1_summary_statistics_sce.tex}
  	\begin{minipage}[center]{0.7\textwidth}
  	\caption*{\footnotesize \textbf{Notes:} Survey weights are used for all calculations. (3) replicates the reported statistics from the paper exactly. (2) corrects for the error reported above and (1) is displaying the summary statistics for the SCE sample.}
@@ -145,58 +146,119 @@ Based on the number of observations presented in \autoref{tab:summary_stats}, it
 
 % Theoretical Underpoinning
 % Cite papers on both sides of the discussion 
-Understanding the determinants of negative duration dependence of unemployment on the job finding rate remains a topic of long-standing discussion within labor economics.  One approach explains the negative duration dependence by the deterioration of skills throughout the unemployment spell. It is also possible that employer's screen potential employees by duration. Within this approach, the job finding rate decreases over the unemployment spell on the individual level. Another approach views the duration dependence through the lense of a sorting mechanism where more employable people find jobs quicker, simply leaving the unemployment to select into long-term employment. However, the principal challenge to overcome is that the job finding rate is unobservable. In fact, we can only observe the binary outcome whether someone finds a job or not. 
+Understanding the determinants of negative duration dependence of unemployment on the job finding rate remains a topic of long-standing discussion within labor economics.  One possible explanation for this phenomenon is that skills deteriorate over the course of an unemployment spell. Another possibility is that employers screen potential employees based on their duration of unemployment, resulting in lower job-finding rates for those who have been unemployed for longer periods. In this approach, the job-finding rate declines at the individual level over the unemployment spell. Alternatively, some scholars view duration dependence as a sorting mechanism, where more employable individuals find jobs more quickly, leaving the less employable individuals to select into long-term unemployment. However, the primary challenge in understanding duration dependence is that the job-finding rate is unobservable, and only the binary outcome whether someone finds a job or not can be observed. 
 
-% Empirical Strategy
-The authors approach this literature from a new angle. They leverage the elicited beliefs of job seeker's and combined them with actual job finding to identify the true heterogeneity of job finding.
- 
+% Conceptual Framework
+The authors approach this literature from a new angle. They leverage the elicited beliefs of job seeker's and combine them with actual job finding to identify the true heterogeneity of job finding and separate the dynamic selection effect from true (individual) duration dependence. Specifically, the covariance between the perceptions and the actual job finding can inform on the ex-ante heterogeneity. Building on this,
+% Insert the Cauchy Schwarz lower bound stuff here
 
-% Finding 1 
-% Optimistic bias
+Their empirical strategy is guided by the following conceptual framework. First, they illustrate how the observed duration dependence can decomposed into the true duration dependence and the selection effect. For this purpose, we follow their notation and denote $T_{i,d}$ as the individual job finding probability. $F_{i,d}$ is the observed realization of job finding and $Z_{i,d}$ indicates the perceived job finding rate.
+
+\begin{align}
+	\mathbf{E}_d (T_{i,d}) - \mathbf{E}_{d+1} (T_{i,d+1}) = \mathbf{E}_d (T_{i,d} - T_{i,d+1}) + \frac{cov_d (T_{i,d},T_{i,d+1})}{1 - \mathbf{E}_d (T_{i,d})}
+\end{align}
+
+The decomposition reveals that the observed duration dependence would coincide with the true duration dependence without dynamic selection $cov_d (T_{i,d},T_{i,d+1}) > 0$ where the actual  job finding rates in adjacent periods would not be correlated with each other. The dynamic selection effect can in itself be decomposed into 
+
+\begin{align}
+	cov_d (T_{i,d},T_{i,d+1}) = var_d (T_{i,d}) -  cov_d (T_{i,d},T_{i,d} - T_{i,d+1})
+\end{align}
+
+Building on equation 1, this emphasizes that if all of the heterogeneity in job finding probability is fully permanent  and subsequently $cov_d (T_{i,d},T_{i,d} - T_{i,d+1}) = 0$, the role of the dynamic selection is fully captured by the variance of job finding $var_d (T_{i,d})$. Conversely, when all of the heterogeneity of job finding probabilities is fully transitory the terms on the RHS coincide and, subsequently, the selection effect does not contribute to the observed duration dependence. 
+
+Next, the authors exploit the information about the perceived job finding probabilities elicited in the SCE. If the job finding probabilities would be unbiased, then the covariance between realized job finding and  perceived job finding would identify, the variance in ex-ante probabilities  ??? This is surely not properly understood
+
+
+% Here I need some math
+% Preferably I also understand it
+\autoref{fig:percep_hist} depicts the histogram of perceptions regarding the probability to find a job in 3 month. The left panel replicates the figure from the paper whereas the right panel uses my own data. Apart from the upper tail of the distribution, the distributions are quite similar. Additionally, both figures can illustrate the bunching where respondents bunch at prominent numbers such as 50\% or 100\%. 
 
 \begin{figure}[!htbp] \centering
 	\includegraphics[width=\textwidth]{../../../bld/figures/histogram_perceptions_figure_1.png}
-	\begin{minipage}[center]{\textwidth}
-		\caption*{\footnotesize \textbf{Notes:} The figure displays fraction of respondents within bins of 
-		10\% width}
-	\end{minipage}
-	\caption{Histogram Perceptions of Job Finding Rate}
+	\caption{Histogram of the Perceptions of U-E 3-Month transition rate}
 	\label{fig:percep_hist}
+\end{figure}
+
+% Finding 1 
+% Optimistic bias
+To make the conceptual framework applicable, the elicited job finding probability needs to have predictive power for the realized job finding rate. As seen in \autoref{fig:actual_by_bin} there exists a positive relationship between the actual job finding rate and the elicited probabilities. Additionally, the graph also indicates that respondents in the lower two bins tend to, on average, exhibit pessimistic bias, as their perceived job finding rate is lower than the average job finding rate of their group. Conversely, respondents in the fourth bin and beyond tend to exhibit, on average,  a substantial optimistic bias towards their probability of finding a job. 
+% I would like to have another reference here
+These findings are consistent with ..., \textcite{Spinne2015} and  \textcite{Baleer2021} which have also documented the existence and sign of such an optimistic bias. Although the different samples tend to behave similarly, differences in the composition of the bins, particularly around the 80\% mark, can lead to some discrepancies.
+
+\begin{figure}[!htbp] \centering
+	\includegraphics[width=\textwidth]{../../../bld/figures/jf3mon_per_percbin_figure_2.png}
+	\begin{minipage}[center]{\textwidth}
+		\caption*{ \scriptsize \textbf{Notes:} All results are based on survey weights. The error bar depicts the respective 95\% confidence interval.}
+	\end{minipage}
+	\caption{Realized Job Finding Probability by Bin of Perceived Probability}
+	\label{fig:actual_by_bin}
 \end{figure}
 
 % Finding 2
 % Perceptions have significant predictional value for actual job finding
+Furthermore, Panel A of \autoref{tab:realized_perc_tabl2} demonstrates the strong predictive capacity of the elicited beliefs, as shown in \autoref{fig:actual_by_bin}. The coefficients based on the own data are presented in the odd-numbered columns, while their counterparts from the authors are located immediately adjacent to them for each specification. All the regressions in this analysis employ weighted least squares (WLS) methodology.
+% Go trough line by line (almost)
+The results presented in (1) and (2) indicate that in a univariate model, the elicited belief is significant at the 1 percent level. Comparing these results to columns (3) and (4) of the table, we can observe that the predictive power of the belief, as measured by the $R^2$, is nearly as strong as when all demographic observables, such as education, gender, and age, are used to predict the likelihood of the respondent transitioning out of unemployment. Furthermore, the final two columns of Panel A suggest that the predictive power of the elicited belief decreases over the course of the unemployment spell. Overall, the coefficients based on the survey data in Panel A are very similar in magnitude to those reported in the paper.
+% Panel B makes only sense after the bootstrap table
+\begin{table}[!htbp] \centering 
+\tiny
+\caption{Linear Regressions of Realized Job Finding Rates on Elicitations} 
+\label{tab:realized_perc_tabl2}
+\input{../../../bld/tables/tab_2_transition_rate_percep.tex}
+\begin{minipage}[center]{0.9\textwidth}
+	\caption*{\tiny \textbf{Notes:} All regression use survey weights. The even columns are using the authors data and the uneven columns the own data. 
+		Standard errors (in parentheses) are clustered on the individual level. *, **, and *** denote significance at the 10, 5, and 1 percent level.}
+\end{minipage}
+\end{table}
 
 % Finding 3 
 % Identifying the heterogeneity in true job finding rate
 
-% FInding 4
-% Optimisitc bias increase over unemployment duration
+Based on the Cauchy-Schwarz inequality with biased beliefs, we can use the previously analyzed relationship between the beliefs and the realized transition rates to compute the lower bound of the true job finding variance. \autoref{tab:lb_variance_table3} depicts the lower bounds computed with the respective specifications. The values of the different specifications are remarkably close we can observe that the lower bound can be tightened by using both elicitations and the observable individual characteristics. 
+% Interpet it using the equations
 
-% Finding 5
-% Controlling for spell fixed effects,  it vanishes =>
-
-\begin{center}
-	\tiny
-	\input{../../../bld/tables/tab_1_transition_rate_percep.tex}
-	\textit{Notes:} All regression use survey weights. The even columns are using the authors data and the uneven columns the own data. $^{{***}}$,$^{{**}}$,$^{{*}}$ denote significance on the, 10, 5, 1 percent level. Standard Errors are clustered at the individual level.
-\end{center}
-
-
+% Also interpret Panel B of Table 2
 
 \begin{center}
 	\input{../../../bld/tables/tab3_bootstrap_lower_bound_variance.tex}
 \end{center}
 
-\begin{center}
-	\tiny
-	\input{../../../bld/tables/tab_4_percep_udur.tex}
-	\textit{Notes:} All regression use survey weights. The first two columns use only the first elicitation for each individual. The even columns are using the authors data and the uneven columns the own data. $^{{***}}$,$^{{**}}$,$^{{*}}$ denote significance on the, 10, 5, 1 percent level. Standard Errors are clustered at the individual level.
-\end{center}
+% FInding 4
+% Optimisitc bias increase over unemployment duration
+\begin{figure}[H]
+	\begin{subfigure}[b]{0.5\textwidth}
+		\centering
+		\caption*{\scriptsize{\textbf{Panel A:} Author Data}} \vspace{-.25cm}
+		 \includegraphics[width=\textwidth]{../../../bld/figures/perc_vs_real_jf3mon_figure_3_panel_a.png}
+		
+	\end{subfigure}
+	\begin{subfigure}[b]{0.5\textwidth}
+		\centering
+		\caption*{\scriptsize{\textbf{Panel B:} Own Data}} \vspace{-.25cm}
+		 \includegraphics[width=\textwidth]{../../../bld/figures/perc_vs_real_jf3mon_figure_3_panel_b.png}
+	\end{subfigure}
+\begin{minipage}[center]{\textwidth}
+	\caption*{ \scriptsize \textbf{Notes:} All results are based on survey weights. The error bar depicts the respective 95\% confidence interval.}
+\end{minipage}
+  \caption{Perceived vs. Actual Job Finding Probabilities}
+\label{fig:perv_vs_real_udur}
+\end{figure}
+
+\autoref{fig:perv_vs_real_udur} shows how the realized and perceived job finding rate evolve throughout the length of the unemployment duration. It has to be noted that by constructing the confidence intervals for the figures there were minor discrepancies between my implementation and the authors implementation which I could not resolve. However, no qualitative or quantitative results is impacted by this difference. Panel A and Panel B both show the initially when the respondents are only unemployed between 0-3 months the beliefs are very accurate. However, throughout the unemployment spell, it appears that the unemployed do not revise their perceptions sufficiently downwards. Whereas the difference between bins 2 and bin 3 in the actual job finding rate is significant, this does not hold true for the beliefs. 
+% Here I need more data to foolproof the things I am claiming 
+
+% Finding 5
+% Controlling for spell fixed effects,  it vanishes =>
+\begin{table}[!htbp] \centering 
+\caption{Linear Regressions of Elicitations on Unemployment Duration}
+\label{tab:realized_perc_table4}
+\input{../../../bld/tables/tab_4_percep_udur.tex}
+\begin{minipage}[center]{.9\textwidth}
+	\caption*{ \scriptsize \textbf{Notes:} All regression use survey weights. The even columns are using the authors data and the uneven columns the own data. Standard errors (in parentheses) are clustered on the individual level. *, **, and *** denote significance at the 10, 5, and 1 percent level.}
+\end{minipage}
+\end{table}
 
 % Plug in my reduced form evidence findings (either based on their data or ideally on my own data)
-
-\section{Contribution}
 
 \section{References}
 

@@ -50,6 +50,8 @@ def task_make_fig3(depends_on,produces):
 
 
 def _make_fig1(auth_df,df,produces):
+    matplotlib.rcParams['xtick.labelsize'] = 20
+    matplotlib.rcParams['ytick.labelsize'] = 20
     for data in [auth_df,df]:
         data = _make_perc_bins(data)
     auth_bin_weight = auth_df.groupby('find_job_3mon_bins')['weight'].sum()
@@ -57,17 +59,19 @@ def _make_fig1(auth_df,df,produces):
     bin_weight = df.groupby('find_job_3mon_bins')['weight'].sum()
     all_weights = bin_weight.sum()
     fig, axs = plt.subplots(ncols=2,figsize=(25,10))
-    fig.supylabel('Relative Frequency (in %)',fontsize = 11.0)
-    fig.supxlabel('Elicited Prob(Find Job in 3 Month)',fontsize = 11.0)
+    fig.supylabel('Relative Frequency (in %)',fontsize = 30.0)
+    fig.supxlabel('Elicited Prob(Find Job in 3 Month)',fontsize = 30.0)
     axs[0].hist(auth_bin_weight.index, weights=(auth_bin_weight/auth_all_weights)*100,color='#FF7F50')
-    axs[0].set_title('Author Data',fontsize=15)
+    axs[0].set_title('Author Data',fontsize=35)
     axs[1].hist(bin_weight.index, weights=(bin_weight/all_weights)*100,color='#800000')
     axs[1].yaxis.set_label_coords(-0.15, 0.5)
-    axs[1].set_title('Own Data',fontsize=11)
+    axs[1].set_title('Own Data',fontsize=35)
     # Save it
     fig.savefig(produces)
 
 def _make_fig2(auth_df,df,produces):
+    matplotlib.rcParams['xtick.labelsize'] = 10
+    matplotlib.rcParams['ytick.labelsize'] = 10
     df = _make_perc_bins(df)
     df_fig = df.loc[df['in_sample_2']== 1]
     # Weighted mean
@@ -90,8 +94,8 @@ def _make_fig2(auth_df,df,produces):
 
     # Make plot
     fig, ax = plt.subplots()
-    fig.supylabel('Realized 3-Month U-E transition rate',fontsize = 11.0)
-    fig.supxlabel('Elicited Prob(Find Job in 3 Month)',fontsize = 11.0)
+    fig.supylabel('Realized 3-Month U-E transition rate',fontsize = 12.0)
+    fig.supxlabel('Elicited Prob(Find Job in 3 Month)',fontsize = 12.0)
     # 45 degree line
     ax.plot(np.arange(-0.1,1.1,0.1),np.arange(-0.1,1.1,0.1),color='grey',label='Rational Expectation')
     # Plot auth data
@@ -103,12 +107,13 @@ def _make_fig2(auth_df,df,produces):
     ax.set_xticks(np.arange(0,1.1,0.1))
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
-    ax.legend(loc=(0,-.25),ncol=3)
+    ax.legend(loc='upper left')
     # Save it
     fig.savefig(produces)
 
 def _make_fig3_panel_a(df,produces):
-    ## TODO: Some discrepancies in the Confidence Intervals -> Check Footnote 29
+    matplotlib.rcParams['xtick.labelsize'] = 12
+    matplotlib.rcParams['ytick.labelsize'] = 12
     ## Also clean up the x axis
     df_fig = df.loc[df['in_sample_2']== 1]
     # Weighted mean
@@ -130,18 +135,20 @@ def _make_fig3_panel_a(df,produces):
     real_err = (real_w_std/np.sqrt(real_n))*real_t
 
     fig, ax = plt.subplots()
-    fig.supylabel('Prob(Find Job in 3 Month)',fontsize = 11.0)
-    fig.supxlabel('Length of Unemployment Spell',fontsize = 11.0)
+    fig.supylabel('Prob(Find Job in 3 Month)',fontsize = 15.0)
+    fig.supxlabel('Length of Unemployment Spell',fontsize = 15.0)
     # Plot Perceived job finding rate
     ax.errorbar(perc_w_mean.index,perc_w_mean,yerr=perc_err,fmt='-o',color='#FF7F50',capsize=4, label='Perceived Job Finding Rate')
     ax.errorbar((real_w_mean.index)+0.1,real_w_mean,yerr=real_err,fmt='-o',color='grey',capsize=4, label='Realized Job Finding Rate')
+    ax.set_xticks(range(1,5),['(0-3) Months','(3-6) Months','(7-12) Months','13+ Months'])
     # Make it look nicer
-    ax.legend(loc=(0,-.25),ncol=2)
+    ax.legend(loc='lower left')
     # Save it
     fig.savefig(produces)
 
 def _make_fig3_panel_b(df,produces):
-    ## TODO: Some discrepancies in the Confidence Intervals -> Check Footnote 29
+    matplotlib.rcParams['xtick.labelsize'] = 12
+    matplotlib.rcParams['ytick.labelsize'] = 12
     ## Also clean up the x axis
     df_fig = df.loc[df['in_sample_2']== 1]
     # Weighted mean
@@ -163,13 +170,14 @@ def _make_fig3_panel_b(df,produces):
     real_err = (real_w_std/np.sqrt(real_n))*real_t
 
     fig, ax = plt.subplots()
-    fig.supylabel('Prob(Find Job in 3 Month)',fontsize = 11.0)
-    fig.supxlabel('Length of Unemployment Spell',fontsize = 11.0)
+    fig.supylabel('Prob(Find Job in 3 Month)',fontsize = 15.0)
+    fig.supxlabel('Length of Unemployment Spell',fontsize = 15.0)
     # Plot Perceived job finding rate
     ax.errorbar(perc_w_mean.index,perc_w_mean,yerr=perc_err,fmt='-o',color='#800000',capsize=4, label='Perceived Job Finding Rate')
     ax.errorbar((real_w_mean.index)+0.1,real_w_mean,yerr=real_err,fmt='-o',color='grey',capsize=4, label='Realized Job Finding Rate')
+    ax.set_xticks(range(1,5),['(0-3) Months','(3-6) Months','(7-12) Months','13+ Months'])
     # Make it look nicer
-    ax.legend(loc=(0,-.25),ncol=2)
+    ax.legend(loc='lower left')
     # Save it
     fig.savefig(produces)
 

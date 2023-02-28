@@ -49,7 +49,7 @@ def _make_latex_table_from_scratch(lb_z1,lb_z12,cov_z_pred1, cov_z_pred2,se_s,au
     
     text_file = open(produces, "w")
     table = rf"""\begin{{table}}[!htbp] \centering 
-    \caption{{Lower Bound Variance}}
+    \caption{{Lower Bound of Variance of the 3-Month Job Finding Probability}}
     \label{{tab:lb_variance_table3}} 
     \begin{{tabular}}{{lcccc}}
     \toprule
@@ -61,7 +61,7 @@ def _make_latex_table_from_scratch(lb_z1,lb_z12,cov_z_pred1, cov_z_pred2,se_s,au
     ... only control & {cov_z_pred1:.3f} & {cov_z_pred1_se:.3f}  & {auth_cov_z_pred1:.3f} &  {auth_cov_z_pred1_se:.3f}  \\
     ... controls and both elicitations & {cov_z_pred2:.3f} & {cov_z_pred2_se:.3f}  & {auth_cov_z_pred2:.3f} & {auth_cov_z_pred2_se:.3f} \\
     \bottomrule
-    \footnotesize{{\textit{{Notes:}} Standard errors are bootstrapped with 2,000 samples.}}
+    \footnotesize{{\textbf{{Notes:}} Standard errors are bootstrapped with 2,000 samples.}}
     \end{{tabular}}
     \end{{table}}
     """
